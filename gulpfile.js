@@ -14,7 +14,7 @@ var inputFiles = {
   scss : './assets/stylesheet/*.scss',
   css : './assets/stylesheet/**/*.css',
   js : './assets/javascript/**/*.js',
-  img : './assets/image/**/*',
+  other : './assets/other/**/*',
   app : './app/**/*'
 };
 
@@ -42,8 +42,8 @@ var processes = {
   js : function (path) {
     return gulp.src(inputFiles.js).pipe(gulp.dest(path+assetsPath));
   },
-  img : function(path) {
-    return gulp.src(inputFiles.img).pipe(gulp.dest(path+assetsPath));
+  other : function(path) {
+    return gulp.src(inputFiles.other).pipe(gulp.dest(path+assetsPath));
   },
   app : function(path) {
     return gulp.src(inputFiles.app).pipe(gulp.dest(path));
@@ -94,15 +94,15 @@ gulp.task('js:dist', ['clean:dist'], function(){
 });
 
 // IMG TASKS
-gulp.task('img:build', ['clean:build'], function(){
-  return processes.img(buildPath);
+gulp.task('other:build', ['clean:build'], function(){
+  return processes.other(buildPath);
 });
-gulp.task('img:watch', function(){
-  processes.img(buildPath);
+gulp.task('other:watch', function(){
+  processes.other(buildPath);
   return browserSync.reload();
 });
-gulp.task('img:dist', ['clean:dist'], function(){
-  return processes.img(distPath);
+gulp.task('other:dist', ['clean:dist'], function(){
+  return processes.other(distPath);
 });
 
 // APP TASKS
@@ -118,26 +118,26 @@ gulp.task('app:dist', ['clean:dist'], function(){
 });
 
 // INJECT DEPENDENCIES
-gulp.task('inject:build', ['css:build', 'js:build', 'img:build', 'app:build'], function(){
+gulp.task('inject:build', ['css:build', 'js:build', 'other:build', 'app:build'], function(){
   return processes.inject(buildPath);
 });
 gulp.task('inject:watch', ['app:watch'], function(){
   processes.inject(buildPath);
   return browserSync.reload();
 });
-gulp.task('inject:dist', ['css:dist', 'js:dist', 'img:dist', 'app:dist'], function(){
+gulp.task('inject:dist', ['css:dist', 'js:dist', 'other:dist', 'app:dist'], function(){
   return processes.inject(distPath);
 });
 
 // BUILD TASKS
-gulp.task('build', ['clean:build', 'css:build', 'js:build', 'img:build', 'app:build', 'inject:build']);
-gulp.task('dist', ['clean:dist', 'css:dist', 'js:dist', 'img:dist', 'app:dist', 'inject:dist']);
+gulp.task('build', ['clean:build', 'css:build', 'js:build', 'other:build', 'app:build', 'inject:build']);
+gulp.task('dist', ['clean:dist', 'css:dist', 'js:dist', 'other:dist', 'app:dist', 'inject:dist']);
 
 // WATCH TASK
 gulp.task('watch', ['build'], function() {
   gulp.watch([inputFiles.scss, inputFiles.css], ['css:watch']);
   gulp.watch(inputFiles.js, ['js:watch']);
-  gulp.watch(inputFiles.img, ['img:watch']);
+  gulp.watch(inputFiles.other, ['other:watch']);
   gulp.watch(inputFiles.app, ['app:watch', 'inject:watch']);
 });
 

@@ -4,6 +4,9 @@
  * Licensed under MIT (https://github.com/twbs/components/blob/master/LICENSE)
  */
 
+// New variables
+@import "variables";
+
 // Core variables and mixins
 @import "components/variables";
 @import "components/mixins";
@@ -54,3 +57,6 @@
 // Utility classes
 @import "components/utilities";
 @import "components/responsive-utilities";
+
+// Custom theme
+@import "bootswatch";
