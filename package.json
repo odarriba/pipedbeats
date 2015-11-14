@@ -17,6 +17,13 @@
   },
   "homepage": "https://github.com/odarriba/pipedbeats#readme",
   "devDependencies": {
-    "gulp": "^3.9.0"
+    "browser-sync": "^2.10.0",
+    "del": "^2.1.0",
+    "event-stream": "^3.3.2",
+    "gulp": "^3.9.0",
+    "gulp-angular-filesort": "^1.1.1",
+    "gulp-inject": "^3.0.0",
+    "gulp-minify-css": "^1.2.1",
+    "gulp-sass": "^2.1.0"
   }
 }

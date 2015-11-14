@@ -1,5 +1,12 @@
 # Created by https://www.gitignore.io/api/node,linux,osx,sublimetext,windows
 
+### pipedbeats ##
+build/**/*
+!build/.gitkeep
+dist/**/*
+!dist/.gitkeep
+
+
 ### Node ###
 # Logs
 logs
@@ -105,4 +112,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
