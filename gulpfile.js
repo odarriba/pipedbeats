@@ -1,149 +1,148 @@
 'use strict';
 
 var gulp = require('gulp'),
-    del = require('del'),
     sass = require('gulp-sass'),
     minifyCss = require('gulp-minify-css'),
     inject = require('gulp-inject'),
     angularFilesort = require('gulp-angular-filesort'),
+    clean = require('gulp-clean'),
     browserSync = require('browser-sync'),
     es = require('event-stream');
 
-var task = {};
-
-var paths = {
-  css : './assets/stylesheet/**/*.[scss,css]',
+// Input files selection paths
+var inputFiles = {
+  scss : './assets/stylesheet/*.scss',
+  css : './assets/stylesheet/**/*.css',
   js : './assets/javascript/**/*.js',
-  images : './assets/image/**/*',
+  img : './assets/image/**/*',
   app : './app/**/*'
 };
 
-var sassFiles = gulp.src('./assets/stylesheet/**/*.scss', {base: './assets/stylesheet'}),
-    cssFiles = gulp.src('./assets/stylesheet/**/*.css', {base: './assets/stylesheet'}),
-    jsFiles = gulp.src('./assets/javascript/**/*.js', {base: './assets/javascript'}),
-    imgFiles = gulp.src('./assets/image/**/*', {base: './assets/image'}),
-    appFiles = gulp.src('./app/**/*', {base: './app'});
+// Paths used by Gulp
+var assetsPath = 'assets',
+    buildPath = './build/',
+    distPath = './dist/';
 
-function compileSass(){
-  return sassFiles.pipe(sass().on('error', sass.logError));
-}
+// Common processing functions used by the tasks
+var processes = {
+  clean : function(path) {
+    return gulp.src(path, {read: false}).pipe(clean());
+  },
+  css : function (path, minify) {
+    minify = minify || false;
 
-// Task to clean the assets folder
-gulp.task('clean:build', function () {
-  return del('./build/assets/*');
+    var input = es.merge(gulp.src(inputFiles.scss).pipe(sass().on('error', sass.logError)), gulp.src(inputFiles.css));
+
+    if (minify === true) {
+      input = input.pipe(minifyCss());
+    }
+
+    return input.pipe(gulp.dest(path+assetsPath));
+  },
+  js : function (path) {
+    return gulp.src(inputFiles.js).pipe(gulp.dest(path+assetsPath));
+  },
+  img : function(path) {
+    return gulp.src(inputFiles.img).pipe(gulp.dest(path+assetsPath));
+  },
+  app : function(path) {
+    return gulp.src(inputFiles.app).pipe(gulp.dest(path));
+  },
+  inject : function(path) {
+    gulp.src(path+'/index.html')
+      .pipe(inject(es.merge(
+        gulp.src(path+assetsPath+'/**/*.css'),
+        gulp.src(path+'/**/*.js').pipe(angularFilesort())
+      ), {
+        starttag : "<!-- {{ext}} files -->",
+        endtag: "<!-- end {{ext}} files -->",
+        relative: true
+      }))
+      .pipe(gulp.dest(path));
+  }
+};
+
+// CLEAN TASKS
+gulp.task('clean:build', function(){
+  return processes.clean(buildPath);
+});
+gulp.task('clean:dist', function(){
+  return processes.clean(distPath);
 });
 
-gulp.task('clean:dist', function () {
-  return del('./dist/assets/*');
+// CSS TASKS
+gulp.task('css:build', ['clean:build'], function(){
+  return processes.css(buildPath, false);
+});
+gulp.task('css:watch', function(){
+  return processes.css(buildPath).pipe(browserSync.stream());
+});
+gulp.task('css:dist', ['clean:dist'], function(){
+  return processes.css(distPath, true);
 });
 
-
-////////////////////////
-//    STYLESHEETS     //
-////////////////////////
-
-// Task to compile the SASS files
-gulp.task('css:build', ['clean:build'], task.css = function() {
-  del('./build/assets/**/*.css');
-  return es.merge(compileSass(), cssFiles).pipe(gulp.dest('./build/assets'));
+// JS TASKS
+gulp.task('js:build', ['clean:build'], function(){
+  return processes.js(buildPath);
+});
+gulp.task('js:watch', function(){
+  processes.js(buildPath);
+  return browserSync.reload();
+});
+gulp.task('js:dist', ['clean:dist'], function(){
+  return processes.js(distPath);
 });
 
-// Task to compile and minify the SASS files with previous cleaning
-gulp.task('css:dist', ['clean:dist'], function() {
-  del('./dist/assets/**/*.css');
-  return es.merge(compileSass(), cssFiles).pipe(minifyCss({compatibility: 'ie8'}))
-    .pipe(gulp.dest('./dist/assets/'));
+// IMG TASKS
+gulp.task('img:build', ['clean:build'], function(){
+  return processes.img(buildPath);
+});
+gulp.task('img:watch', function(){
+  processes.img(buildPath);
+  return browserSync.reload();
+});
+gulp.task('img:dist', ['clean:dist'], function(){
+  return processes.img(distPath);
 });
 
-
-////////////////////////
-//       IMAGES       //
-////////////////////////
-
-// Copy all the imgs
-gulp.task('img:build', ['clean:build'], task.img = function() {
-  return imgFiles.pipe(gulp.dest('./build/assets/'));
+// APP TASKS
+gulp.task('app:build', ['clean:build'], function(){
+  return processes.app(buildPath);
+});
+gulp.task('app:watch', function(){
+  // This task doesn't reload because it's done in the 'inject:watch' task.
+  return processes.app(buildPath);
+});
+gulp.task('app:dist', ['clean:dist'], function(){
+  return processes.app(distPath);
 });
 
-// Copy all the imgs to dist
-gulp.task('img:dist', ['clean:dist'], function() {
-  return imgFiles.pipe(gulp.dest('./dist/assets/'));
+// INJECT DEPENDENCIES
+gulp.task('inject:build', ['css:build', 'js:build', 'img:build', 'app:build'], function(){
+  return processes.inject(buildPath);
+});
+gulp.task('inject:watch', ['app:watch'], function(){
+  processes.inject(buildPath);
+  return browserSync.reload();
+});
+gulp.task('inject:dist', ['css:dist', 'js:dist', 'img:dist', 'app:dist'], function(){
+  return processes.inject(distPath);
 });
 
-////////////////////////
-//    JAVASCRIPTS     //
-////////////////////////
+// BUILD TASKS
+gulp.task('build', ['clean:build', 'css:build', 'js:build', 'img:build', 'app:build', 'inject:build']);
+gulp.task('dist', ['clean:dist', 'css:dist', 'js:dist', 'img:dist', 'app:dist', 'inject:dist']);
 
-// Copy all the javascripts
-gulp.task('js:build', ['clean:build'], task.js = function() {
-  return jsFiles.pipe(gulp.dest('./build/assets/'));
+// WATCH TASK
+gulp.task('watch', ['build'], function() {
+  gulp.watch([inputFiles.scss, inputFiles.css], ['css:watch']);
+  gulp.watch(inputFiles.js, ['js:watch']);
+  gulp.watch(inputFiles.img, ['img:watch']);
+  gulp.watch(inputFiles.app, ['app:watch', 'inject:watch']);
 });
 
-// Copy all the javascripts to dist
-gulp.task('js:dist', ['clean:dist'], function() {
-  return jsFiles.pipe(gulp.dest('./dist/assets/'));
-});
-
-////////////////////////
-//    APPLICATION     //
-////////////////////////
-
-// Copy all the javascripts
-gulp.task('app:build', ['clean:build'], task.app = function() {
-  return appFiles.pipe(gulp.dest('./build/'));
-});
-
-// Copy all the javascripts to dist
-gulp.task('app:dist', ['clean:dist'], function() {
-  return appFiles.pipe(gulp.dest('./dist/'));
-});
-
-////////////////////////
-//     INJECTION      //
-////////////////////////
-
-// Task to inject the files after compiling the assets during build
-gulp.task('inject:build', ['css:build', 'js:build', 'img:build', 'app:build'], task.inject = function() {
-  gulp.src('./build/index.html')
-    .pipe(inject(es.merge(
-      gulp.src('./build/assets/**/*.css', {read: false}),
-      gulp.src('./build/**/*.js').pipe(angularFilesort())
-    ), {
-      starttag : "<!-- {{ext}} files -->",
-      endtag: "<!-- end {{ext}} files -->",
-      relative: true
-    }))
-    .pipe(gulp.dest('./build/'));
-});
-
-// Task to inject the files after compiling and minifying the assets
-gulp.task('inject:dist', ['css:dist', 'js:dist', 'img:dist', 'app:dist'], function() {
-  gulp.src('./dist/index.html')
-    .pipe(inject(es.merge(
-      gulp.src('./dist/assets/**/*.css', {read: false}),
-      gulp.src('./dist/**/*.js').pipe(angularFilesort())
-    ), {
-      starttag : "<!-- {{ext}} files -->",
-      endtag: "<!-- end {{ext}} files -->",
-      relative: true
-    }))
-    .pipe(gulp.dest('./dist/'));
-});
-
-// Build and distribution pipelines
-gulp.task('build', ['clean:build', 'css:build', 'img:build', 'inject:build']);
-gulp.task('dist', ['clean:dist', 'css:dist', 'img:dist', 'inject:dist']);
-
-// Watch tasks
-gulp.task('watch', ['build'], task.watch = function() {
-  gulp.watch(paths.css, ['build']);
-  gulp.watch(paths.js, ['build']);
-  gulp.watch(paths.img, ['img:build']);
-  gulp.watch(paths.app, ['build']);
-});
-
-// Build and serve the output from the build
-gulp.task('serve', ['build'], function() {
+// SERVE TASK
+gulp.task('serve', ['build', 'watch'], function() {
   browserSync({
     notify: false,
     logPrefix: 'Server',
@@ -151,17 +150,7 @@ gulp.task('serve', ['build'], function() {
       baseDir: './build'
     }
   });
-
-  gulp.watch(paths.css, ['serve:rebuild']);
-  gulp.watch(paths.js, ['serve:rebuild']);
-  gulp.watch(paths.img, ['img:build']);
-  gulp.watch(paths.app, ['serve:rebuild']);
 });
 
-// Build and serve the output from the build
-gulp.task('serve:rebuild', ['build'], function() {
-  browserSync.reload();
-});
-
-// Default tasks
-gulp.task('default', ['build']);
+// DEFAULT TASK
+gulp.task('default', ['build', 'watch', 'serve']);
