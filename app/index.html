@@ -35,10 +35,10 @@
             <li ui-sref-active="active"><a ui-sref="start">Start</a></li>
             <li ui-sref-active="active"><a ui-sref="about">About</a></li>
           </ul>
-          <form class="navbar-form navbar-right search-form" role="search">
+          <form class="navbar-form navbar-right search-form" role="search" ng-controller="searchController as searchCtrl" name="searchForm" ng-submit="doSearch()" novalidate>
             <div class="form-group">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search beats...">
+              <div class="input-group" ng-class="{'has-error' : (searchForm.searchTerms.$error.required && searchForm.searchTerms.$dirty)}">
+                <input id="search-terms" name="searchTerms" ng-model="searchTerms" type="text" class="form-control" placeholder="Search beats..." required>
                 <span class="input-group-btn">
                   <button class="btn btn-submit" type="submit"><i class="fa fa-search"></i></button>
                 </span>
