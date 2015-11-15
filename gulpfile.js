@@ -58,7 +58,7 @@ var processes = {
     return gulp.src(inputFiles.app).pipe(gulp.dest(path));
   },
   inject : function(path) {
-    gulp.src(path+'/index.html')
+    return gulp.src(path+'/index.html')
       .pipe(inject(es.merge(
         gulp.src(path+assetsPath+'/**/*.css'),
         gulp.src(path+'/**/*.js').pipe(angularFilesort())
