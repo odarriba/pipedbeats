@@ -1,0 +1,59 @@
+// Player-related CSS
+
+.navbar-player {
+  background-color: #eee;
+  border-color: darken(#eee, 30%);
+
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.3);
+
+  .container-fluid {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 64px;
+  }
+
+  .controls {
+    order: 1;
+
+    // Be a flex continer to align items
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+
+    // Max height available
+    height: 64px;
+
+    i.control {
+      font-size: 1.8em;
+      float: left;
+      margin: 0 8px;
+
+      &#play, &#pause {
+        font-size: 2.5em;
+      }
+    }
+  }
+
+  .player-progress {
+    order: 2;
+
+    width: 100%;
+    margin: auto 20px;
+
+    padding: 1px 0px;
+
+    .progress {
+      height: 3px;
+      margin-bottom: 0px;
+      
+      .progress-bar {
+        height: 3px;
+        -moz-box-shadow: 0px 0px 30px #ffffff;
+        -webkit-box-shadow: 0px 0px 30px #ffffff;
+        box-shadow: 0px 0px 30px #ffffff;
+      }
+    }
+  }
+}

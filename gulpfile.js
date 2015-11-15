@@ -18,6 +18,15 @@ var inputFiles = {
   app : './app/**/*'
 };
 
+// Watch files selection paths
+var watchFiles = {
+  scss : './assets/stylesheet/**/*.scss',
+  css : './assets/stylesheet/**/*.css',
+  js : './assets/javascript/**/*.js',
+  other : './assets/other/**/*',
+  app : './app/**/*'
+};
+
 // Paths used by Gulp
 var assetsPath = 'assets',
     buildPath = './build/',
@@ -135,10 +144,10 @@ gulp.task('dist', ['clean:dist', 'css:dist', 'js:dist', 'other:dist', 'app:dist'
 
 // WATCH TASK
 gulp.task('watch', ['build'], function() {
-  gulp.watch([inputFiles.scss, inputFiles.css], ['css:watch']);
-  gulp.watch(inputFiles.js, ['js:watch']);
-  gulp.watch(inputFiles.other, ['other:watch']);
-  gulp.watch(inputFiles.app, ['app:watch', 'inject:watch']);
+  gulp.watch([watchFiles.scss, watchFiles.css], ['css:watch']);
+  gulp.watch(watchFiles.js, ['js:watch']);
+  gulp.watch(watchFiles.other, ['other:watch']);
+  gulp.watch(watchFiles.app, ['app:watch', 'inject:watch']);
 });
 
 // SERVE TASK
