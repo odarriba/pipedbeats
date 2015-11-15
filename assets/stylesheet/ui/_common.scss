@@ -1,6 +1,11 @@
 // Common elements
+html, body {
+  min-height: 100%;
+}
+
 .navbar-fixed-top + .container-fluid {
   margin-top: 70px;
+  min-height: calc(100% - 140px);
 }
 
 .navbar .search-form {

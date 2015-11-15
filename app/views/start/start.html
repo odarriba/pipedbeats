@@ -1,1 +1,16 @@
-Start
+<div class="search-container">
+  <h1>Welcome!</h1>
+  <h2>Please, give some terms and we'll find your beats</h2>
+  <form class='form search-form' ng-controller="searchController" name="searchForm" ng-submit="doSearch()" novalidate>
+    <div class="form-group">
+      <div class="input-group" ng-class="{'has-error' : searchForm.searchTerms.$error.required}">
+        <input id="search-terms" name="searchTerms" ng-model="searchTerms" type="text" class="form-control input-lg" placeholder="Search beats..." required>
+        <span class="input-group-btn">
+          <button class="btn btn-success btn-submit btn-lg" type="submit">
+            <i class="fa fa-search"></i><span class='hidden-xs'>&nbsp;Search</span>
+          </button>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>

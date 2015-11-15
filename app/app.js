@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module("pipedBeats", ['ui.router']);
+var app = angular.module('pipedBeats', ['ui.router']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
   //
@@ -11,13 +11,24 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('start', {
       url: "/",
-      templateUrl: "views/start/start.html"
+      templateUrl: "../views/start/start.html"
+    })
+    .state('search', {
+      url: "/search/:searchTerms",
+      templateUrl: "../views/search/search.html"
     })
     .state('about', {
       url: "/about",
-      templateUrl: "views/about/about.html"
+      templateUrl: "../views/about/about.html"
     });
 });
+
+app.run(['$rootScope', '$state', '$stateParams',
+  function ($rootScope,   $state,   $stateParams) {
+    $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
+  }
+]);
 
 $("#player-volume .slider").slider({
   min: 0,

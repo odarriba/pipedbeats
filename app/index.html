@@ -18,7 +18,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body ng-class="$state.current.name">
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -37,13 +37,13 @@
           </ul>
           <form class="navbar-form navbar-right search-form" role="search">
             <div class="form-group">
-              <div class="input-group has-primary">
+              <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search beats...">
                 <span class="input-group-btn">
                   <button class="btn btn-submit" type="submit"><i class="fa fa-search"></i></button>
                 </span>
               </div>
-            </div>
+            </div> <!--/.form-group -->
           </form>
         </div><!--/.nav-collapse -->
       </div>
