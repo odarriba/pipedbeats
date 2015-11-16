@@ -9,6 +9,8 @@
     <link rel="icon" href="favicon.ico">
     <title>Piped Beats</title>
 
+    <!-- vendor css files -->
+    <!-- end vendor css files -->
     <!-- css files -->
     <!-- end css files -->
 
@@ -35,7 +37,7 @@
             <li ui-sref-active="active"><a ui-sref="start">Start</a></li>
             <li ui-sref-active="active"><a ui-sref="about">About</a></li>
           </ul>
-          <form class="navbar-form navbar-right search-form" role="search" ng-controller="searchController as searchCtrl" name="searchForm" ng-submit="doSearch()" novalidate>
+          <form class="navbar-form navbar-right search-form" role="search" name="searchForm" ng-search-form>
             <div class="form-group">
               <div class="input-group" ng-class="{'has-error' : (searchForm.searchTerms.$error.required && searchForm.searchTerms.$dirty)}">
                 <input id="search-terms" name="searchTerms" ng-model="searchTerms" type="text" class="form-control" placeholder="Search beats..." required>
@@ -74,8 +76,8 @@
       </div>
     </nav>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- vendor js files -->
+    <!-- end vendor js files -->
     <!-- js files -->
     <!-- end js files -->
   </body>

@@ -28,13 +28,13 @@ app.run(['$rootScope', '$state', '$stateParams',
   function ($rootScope,   $state,   $stateParams) {
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
+
+    $("#player-volume .slider").slider({
+      min: 0,
+      max: 100,
+      value: 50,
+      step: 1,
+      tooltip: 'show'
+    });
   }
 ]);
-
-$("#player-volume .slider").slider({
-  min: 0,
-  max: 100,
-  value: 50,
-  step: 1,
-  tooltip: 'show'
-});

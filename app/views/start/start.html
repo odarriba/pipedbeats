@@ -1,7 +1,7 @@
 <div class="search-container">
   <h1>Welcome!</h1>
   <h2>Please, give some terms and we'll find your beats</h2>
-  <form class='form search-form' ng-controller="searchController as searchCtrl" name="searchForm" ng-submit="doSearch()" novalidate>
+  <form class='form search-form' name="searchForm" ng-submit="doSearch()" ng-search-form>
     <div class="form-group">
       <div class="input-group" ng-class="{'has-error' : (searchForm.searchTerms.$error.required && searchForm.searchTerms.$dirty)}">
         <input id="search-terms" name="searchTerms" ng-model="searchTerms" type="text" class="form-control input-lg" placeholder="Search beats..." required>

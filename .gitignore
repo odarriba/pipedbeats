@@ -1,10 +1,17 @@
-# Created by https://www.gitignore.io/api/node,linux,osx,sublimetext,windows
+# Created by https://www.gitignore.io/api/bower,node,linux,osx,sublimetext,windows
 
 ### pipedbeats ##
 build/**/*
 !build/.gitkeep
 dist/**/*
 !dist/.gitkeep
+
+
+### Bower ###
+bower_components
+.bower-cache
+.bower-registry
+.bower-tmp
 
 
 ### Node ###
