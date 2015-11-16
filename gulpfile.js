@@ -2,6 +2,7 @@
 
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
+    minifyCss = require("gulp-minify-css"),
     mainBowerFiles = require('main-bower-files'),
     concat = require('gulp-concat'),
     inject = require('gulp-inject'),
@@ -16,8 +17,7 @@ var inputFiles = {
   css : './assets/stylesheet/**/*.css',
   js : './assets/javascript/**/*.js',
   other : './assets/other/**/*',
-  app : './app/**/*',
-  bower: ['bower.json', '.bowerrc']
+  app : './app/**/*'
 };
 
 // Watch files selection paths
@@ -45,8 +45,13 @@ var processes = {
     return gulp.src(path, {read: false}).pipe(clean());
   },
   buildCss : function (path) {
-    return es.merge(gulp.src(inputFiles.scss).pipe(sass().on('error', sass.logError)), gulp.src(inputFiles.css))
-            .pipe(gulp.dest(path+assetsPath.css));
+    var files = es.merge(gulp.src(inputFiles.scss).pipe(sass().on('error', sass.logError)), gulp.src(inputFiles.css));
+
+    if (path === distPath) {
+      files = files.pipe(minifyCss());
+    }
+
+    return files.pipe(gulp.dest(path+assetsPath.css));
   },
   buildJs : function (path) {
     return gulp.src(inputFiles.js)
@@ -66,9 +71,14 @@ var processes = {
       .pipe(gulp.dest(path+assetsPath.js));
 
     // Compile the SASS and CSS
-    es.merge(gulp.src(mainBowerFiles({filter: '**/*.css'})), gulp.src(mainBowerFiles({filter: '**/*.scss'})).pipe(sass().on('error', sass.logError)))
-        .pipe(concat('vendors.css'))
-        .pipe(gulp.dest(path+assetsPath.css));
+    var cssFiles = es.merge(gulp.src(mainBowerFiles({filter: '**/*.css'})), gulp.src(mainBowerFiles({filter: '**/*.scss'})).pipe(sass().on('error', sass.logError)))
+      .pipe(concat('vendors.css'));
+
+    if (path === distPath) {
+      cssFiles = cssFiles.pipe(minifyCss());
+    }
+
+    cssFiles.pipe(gulp.dest(path+assetsPath.css));
 
     // Copy the fonts of FontAwesome
     return gulp.src(mainBowerFiles({filter: '**/fonts/*'}))
@@ -92,8 +102,12 @@ var processes = {
 };
 
 
+// VENDOR TASKS
 gulp.task('vendor:build', ['clean:build'], function() {
   return processes.buildVendors(buildPath);
+});
+gulp.task('vendor:dist', ['clean:dist'], function() {
+  return processes.buildVendors(distPath);
 });
 
 // CLEAN TASKS
@@ -152,20 +166,20 @@ gulp.task('app:dist', ['clean:dist'], function(){
 });
 
 // INJECT DEPENDENCIES
-gulp.task('inject:build', ['css:build', 'js:build', 'other:build', 'vendor:build', 'app:build'], function(){
+gulp.task('inject:build', ['vendor:build', 'css:build', 'js:build', 'other:build', 'app:build'], function(){
   return processes.inject(buildPath);
 });
 gulp.task('inject:watch', ['app:watch'], function(){
   processes.inject(buildPath);
   return browserSync.reload();
 });
-gulp.task('inject:dist', ['css:dist', 'js:dist', 'other:dist', 'app:dist'], function(){
+gulp.task('inject:dist', ['vendor:dist', 'css:dist', 'js:dist', 'other:dist', 'app:dist'], function(){
   return processes.inject(distPath);
 });
 
 // BUILD TASKS
 gulp.task('build', ['clean:build', 'vendor:build', 'css:build', 'js:build', 'other:build', 'app:build', 'inject:build']);
-gulp.task('dist', ['clean:dist', 'css:dist', 'js:dist', 'other:dist', 'app:dist', 'inject:dist']);
+gulp.task('dist', ['clean:dist', 'vendor:dist', 'css:dist', 'js:dist', 'other:dist', 'app:dist', 'inject:dist']);
 
 // WATCH TASK
 gulp.task('watch', ['build'], function() {
