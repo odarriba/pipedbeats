@@ -29,12 +29,10 @@ app.run(['$rootScope', '$state', '$stateParams',
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
 
-    $("#player-volume .slider").slider({
-      min: 0,
-      max: 100,
-      value: 50,
-      step: 1,
-      tooltip: 'show'
-    });
+    $rootScope.config = {
+      soundCloud : {
+        clientId : 'b1d604e6c71ffb73a022a80766d869f1'
+      }
+    };
   }
 ]);
