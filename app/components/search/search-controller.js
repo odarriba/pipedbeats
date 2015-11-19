@@ -11,7 +11,9 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$state',
 
   soundCloud.get('/tracks', { q: $scope.searchTerms }, function(tracks){
     // Assign results and disable laoding state
-    $scope.results = tracks;
-    $scope.loading = false;
+    $scope.$apply(function () {
+      $scope.results = tracks;
+      $scope.loading = false;
+    });
   });
 }]);

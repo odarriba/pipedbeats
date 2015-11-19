@@ -3,8 +3,11 @@ html, body {
   min-height: 100%;
 }
 
-.navbar-fixed-top + .container-fluid {
-  margin-top: 70px;
+body {
+  padding: 70px 0;
+}
+
+.app-continer {
   min-height: calc(100% - 140px);
 }
 
