@@ -13,11 +13,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: "/",
       templateUrl: "../views/start/start.html"
     })
-    .state('search', {
-      url: "/search/:searchTerms",
-      templateUrl: "../views/search/search.html",
-      controller: 'searchController as searchCtrl'
-    })
     .state('about', {
       url: "/about",
       templateUrl: "../views/about/about.html"
