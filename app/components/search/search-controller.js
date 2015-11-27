@@ -10,6 +10,8 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$state',
       $state.go('start');
     }
 
+    alert("Hola!");
+
     soundCloud.get('/tracks', { q: $scope.searchTerms }, function(tracks){
       // Assign results and disable laoding state
       $scope.$apply(function () {
@@ -19,37 +21,40 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$state',
     });
   }
 ])
-.config(function($stateProvider,$urlMatcherFactoryProvider){
-  /*
-   * Route configuration related to this controller
-   */
+.config(['$stateProvider', '$urlMatcherFactoryProvider',
+  function($stateProvider, $urlMatcherFactoryProvider){
+    /*
+     * Route configuration related to this controller
+     */
 
-  // Custom matcher to avoid url-encoding problems and filter by pattern
-  $urlMatcherFactoryProvider.type('searchValidQueries', {
-      encode: function(val) {return val !== null ? val.toString() : val;},
-      decode: function(val) {return val !== null ? val.toString() : val;},
-      is: function () { return true; },
-      pattern: /(\/[a-zA-Z0-9]+:[a-zA-Z0-9]+)/
-  });
+    // Custom matcher to avoid url-encoding problems and filter by pattern
+    $urlMatcherFactoryProvider.type('searchValidQueries', {
+        name: 'searchValidQueries',
+        encode: function(val) {return val !== null ? val.toString() : val;},
+        decode: function(val) {return val !== null ? val.toString() : val;},
+        is: function () { return true; },
+        pattern: /\/[a-z0-9]+:.+/i
+    });
 
-  $stateProvider
-  .state('search', {
-    url: "/search{searchQuery:searchValidQueries}",
-    resolve: {
-      // Function to parse the encoded params from URL
-      urlParams : function($stateParams) {
-        var queries = $stateParams.searchQuery.substring(1).split('/');
-        var result = {};
+    $stateProvider
+    .state('search', {
+      url: "/search{searchQuery:searchValidQueries}",
+      resolve: {
+        // Function to parse the encoded params from URL
+        urlParams : function($stateParams) {
+          var queries = $stateParams.searchQuery.substring(1).split('/');
+          var result = {};
 
-        for(var i in queries) {
-          var query = queries[i].split(':');
-          result[query[0]] = query[1];
+          for(var i in queries) {
+            var query = queries[i].split(':');
+            result[query.shift()] = query.join(':');
+          }
+
+          return result;
         }
-
-        return result;
-      }
-    },
-    templateUrl: "../views/search/search.html",
-    controller: 'searchController as searchCtrl'
-  });
-});
+      },
+      templateUrl: "../views/search/search.html",
+      controller: 'searchController as searchCtrl'
+    });
+  }
+]);
