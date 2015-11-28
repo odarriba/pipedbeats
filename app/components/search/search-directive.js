@@ -6,25 +6,13 @@ angular.module('pipedBeats').directive('ngSearchForm', function() {
     restrict: 'A',
     controller: ['$scope', '$state', function($scope, $state){
       $scope.searchTerms = '';
+      $scope.searchGenre = 'all';
 
       $scope.doSearch = function() {
         if ($scope.searchTerms !== '') {
-          $state.go('search', {searchQuery: $scope.buildSearchQuery()});
+          $state.go('search', {genre: $scope.searchGenre, q: $scope.searchTerms});
           $scope.searchTerms = '';
         }
-      };
-
-      $scope.buildSearchQuery = function() {
-        var query = "";
-
-        if ($scope.searchTerms !== undefined && $scope.searchTerms !== ""){
-          query += "/terms:"+$scope.searchTerms;
-        }
-        if ($scope.searchGenre !== undefined && $scope.searchGenre !== ""){
-          query += "/genre:"+$scope.searchGenre;
-        }
-
-        return query;
       };
     }],
     link: function(scope , element , attributes) {
