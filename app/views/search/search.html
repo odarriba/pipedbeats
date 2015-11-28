@@ -1,15 +1,25 @@
 <div class='search-results'>
-  <div class="page-header">
-    <h1>Search results <small>{{searchTerms}}</small></h1>
-  </div>
-
-  <div class='track' ng-repeat="track in results">
-    <img class='cover' ng-src="{{track.artwork_url || '/assets/default-cover.png'}}" />
-    <div class='data'>
-      <div class='title'>{{track.title}}</div>
-      <div class='author'>
-        <img class='avatar' ng-src="{{track.user.avatar_url}}" />
-        <span class='name'>{{track.user.username}}</span>
+  <div class='row'>
+    <div class='col-md-3'>
+      Hehe
+    </div>
+    <div class='col-md-9'>
+      <div class="page-header">
+        <h1>Search results <small>{{searchGenre}} music with '{{searchTerms}}'</small></h1>
+      </div>
+      <div class='row tracks-container'>
+        <div class='col-md-3' ng-repeat="track in results">
+          <div class='track'>
+            <img class='cover' ng-src="{{track.artwork_url.replace('large','t500x500') || '/assets/default-cover.png'}}" />
+            <div class='data'>
+              <div class='title'>{{track.title}}</div>
+              <div class='author'>
+                <img class='avatar' ng-src="{{track.user.avatar_url}}" />
+                <span class='name'>{{track.user.username}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -20,18 +20,19 @@
     "angular": "angularjs#~1.4.7",
     "font-awesome": "~4.4.0",
     "angular-ui-router": "ui-router#~0.2.15",
-    "bootstrap-sass": "~3.3.5"
+    "bootstrap-sass": "~3.3.5",
+    "angularjs-filters": "~0.0.2"
   },
   "overrides": {
-      "font-awesome": {
-          "main": [
-              "css/font-awesome.css",
-              "fonts/fontawesome-webfont.eot",
-              "fonts/fontawesome-webfont.woff",
-              "fonts/fontawesome-webfont.woff2",
-              "fonts/fontawesome-webfont.ttf",
-              "fonts/fontawesome-webfont.svg"
-          ]
-      }
+    "font-awesome": {
+      "main": [
+        "css/font-awesome.css",
+        "fonts/fontawesome-webfont.eot",
+        "fonts/fontawesome-webfont.woff",
+        "fonts/fontawesome-webfont.woff2",
+        "fonts/fontawesome-webfont.ttf",
+        "fonts/fontawesome-webfont.svg"
+      ]
+    }
   }
 }
