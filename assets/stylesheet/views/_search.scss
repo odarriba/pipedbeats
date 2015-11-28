@@ -42,12 +42,27 @@ $search_result_row_height: 80px;
 
           .author {
             margin-top: 4px;
+            clear: both;
+            overflow: hidden;
 
             .avatar {
+              float: left;
               max-width: 32px;
               max-height: 32px;
               padding: 2px;
               border: 1px solid #ddd;
+            }
+
+            .name {
+              float: left;
+
+              margin-left: 5px;
+              max-width: calc(100% - 37px);
+              line-height: 32px;
+
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
           }
         }
