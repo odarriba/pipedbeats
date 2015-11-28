@@ -40,12 +40,23 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$state',
       resolve: {
         // Function to parse the encoded params from URL
         urlParams : function($stateParams) {
-          var queries = $stateParams.searchQuery.substring(1).split('/');
-          var result = {};
+          var queries = $stateParams.searchQuery.substring(1).split('/'),
+              cleanQueries = [],
+              result = {};
 
-          for(var i in queries) {
-            var query = queries[i].split(':');
-            result[query.shift()] = query.join(':');
+          for (var i in queries) {
+            if (queries[i].match(/[a-z0-9]+:.+/i)) {
+              cleanQueries.push(queries[i]);
+            } else {
+              cleanQueries[cleanQueries.length-1] += "/"+queries[i];
+            }
+          }
+
+          for(var i in cleanQueries) {
+            var query = cleanQueries[i].split(':');
+            if (query.length > 1) {
+              result[query.shift()] = query.join(':');
+            }
           }
 
           return result;
