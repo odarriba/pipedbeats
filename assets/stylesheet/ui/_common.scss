@@ -11,17 +11,25 @@ body {
   min-height: calc(100% - 140px);
 }
 
-.navbar .search-form {
-  border-color: transparent;
-  input {
-    color: $navbar-inverse-bg !important;
-    border-radius: 30px;
-    border-color: $navbar-inverse-border;
+.navbar {
+  &.navbar-default {
+    box-shadow: none;
   }
-  .btn-submit {
-    color: #fff;
-    border-color: $navbar-inverse-border;
-    background-color: $navbar-inverse-border;
-    border-radius: 0 30px 30px 0;
+
+  .search-form {
+    border-color: transparent;
+
+    input {
+      color: $navbar-inverse-bg !important;
+      border-radius: 30px;
+      border-color: $navbar-inverse-border;
+    }
+
+    .btn-submit {
+      color: #fff;
+      border-color: $navbar-inverse-border;
+      background-color: $navbar-inverse-border;
+      border-radius: 0 30px 30px 0;
+    }
   }
 }
