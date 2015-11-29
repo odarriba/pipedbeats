@@ -329,7 +329,7 @@ $grid-columns:              12 !default;
 $grid-gutter-width:         30px !default;
 // Navbar collapse
 //** Point at which the navbar becomes uncollapsed.
-$grid-float-breakpoint:     $screen-sm-min !default;
+$grid-float-breakpoint:     $screen-xs-min !default;
 //** Point at which the navbar begins collapsing.
 $grid-float-breakpoint-max: ($grid-float-breakpoint - 1) !default;
 
@@ -368,7 +368,7 @@ $navbar-collapse-max-height:       340px !default;
 
 $navbar-default-color:             $brand-color !default;
 $navbar-default-bg:                transparent !default;
-$navbar-default-border:            transparent !default;
+$navbar-default-border:            $navbar-default-color !default;
 
 // Navbar links
 $navbar-default-link-color:                $brand-color !default;
@@ -385,9 +385,9 @@ $navbar-default-brand-hover-color:         $navbar-default-link-hover-color !def
 $navbar-default-brand-hover-bg:            transparent !default;
 
 // Navbar toggle
-$navbar-default-toggle-hover-bg:           #ddd !default;
-$navbar-default-toggle-icon-bar-bg:        #ccc !default;
-$navbar-default-toggle-border-color:       #ddd !default;
+$navbar-default-toggle-hover-bg:           lighten($navbar-default-link-color, 30%) !default;
+$navbar-default-toggle-icon-bar-bg:        $navbar-default-link-color !default;
+$navbar-default-toggle-border-color:       $navbar-default-link-color !default;
 
 
 //=== Inverted navbar

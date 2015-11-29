@@ -14,22 +14,48 @@ body {
 .navbar {
   &.navbar-default {
     box-shadow: none;
+    border-bottom: 1px solid $navbar-default-color
   }
 
   .search-form {
     border-color: transparent;
 
-    input {
-      color: $navbar-inverse-bg !important;
-      border-radius: 30px;
-      border-color: $navbar-inverse-border;
+    .form-group {
+      display: inline-block;
+      margin-bottom: 0;
+      vertical-align: middle;
     }
 
-    .btn-submit {
-      color: #fff;
-      border-color: $navbar-inverse-border;
-      background-color: $navbar-inverse-border;
-      border-radius: 0 30px 30px 0;
+    .input-group {
+      @media screen and (min-width: $screen-xs-min) {
+        display: inline-table;
+        vertical-align: middle;
+
+        input {
+          width: 100%;
+          display: inline-block;
+          vertical-align: middle;
+        }
+
+        .input-group-btn {
+          width: auto;
+        }
+      }
+
+      input {
+        color: $navbar-default-color !important;
+        border-radius: 30px;
+        border-color: $navbar-default-color;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+
+      .btn-submit {
+        color: #fff;
+        border-color: $navbar-default-color;
+        background-color: $navbar-default-color;
+        border-radius: 0 30px 30px 0;
+      }
     }
   }
 }
