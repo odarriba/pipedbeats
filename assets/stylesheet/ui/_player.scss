@@ -70,16 +70,6 @@
         background: none;
         background-color: #cae6fc;
       }
-
-      .slider-handle {
-        display: none;
-      }
-    }
-
-    &:hover {
-      .slider-handle {
-        display: block;
-      }
     }
   }
 
@@ -106,15 +96,36 @@
         background: none;
         background-color: #cae6fc;
       }
-
-      .slider-handle {
-        display: none;
-      }
     }
+  }
+}
 
-    &:hover {
-      .slider-handle {
-        display: block;
+// Avoid double touch in slides on mobile devices
+@media screen and (min-width: $screen-sm-min) {
+  .navbar-player {
+    .container-fluid {
+      .player-volume {
+        .slider-handle {
+          display: none;
+        }
+
+        &:hover {
+          .slider-handle {
+            display: block;
+          }
+        }
+      }
+
+      .player-progress {
+        .slider-handle {
+          display: none;
+        }
+
+        &:hover {
+          .slider-handle {
+            display: block;
+          }
+        }
       }
     }
   }
