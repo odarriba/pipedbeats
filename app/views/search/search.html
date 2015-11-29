@@ -1,27 +1,20 @@
 <div class='search-results'>
-  <div class='row'>
-    <div class='col-md-3'>
-      Hehe
+  <div class='covers'>
+    <div class='cover cover-last'>
+      <img src='https://i1.sndcdn.com/artworks-000022582268-3vmvlz-t500x500.jpg' />
     </div>
-    <div class='col-md-9'>
-      <div class="page-header">
-        <h1>Search results <small>{{searchGenre}} music with '{{searchTerms}}'</small></h1>
-      </div>
-      <div class='row tracks-container'>
-        <div class='track-container col-md-3' ng-repeat="track in results">
-          <div class='track'>
-            <img class='cover' ng-src="{{track.artwork_url.replace('large','t500x500') || '/assets/default-cover.png'}}" />
-            <div class='data'>
-              <div class='title'>{{track.title}}</div>
-              <div class='author'>
-                <img class='avatar' ng-src="{{track.user.avatar_url}}" />
-                <span class='name'>{{track.user.username}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class='cover cover-current'>
+      <img src='https://i1.sndcdn.com/artworks-000082555970-1s3gwn-t500x500.jpg' />
     </div>
+    <div class='cover cover-next'>
+      <img src='https://i1.sndcdn.com/artworks-000113289300-6db8zq-t500x500.jpg' />
+    </div>
+  </div>
+  <div class='title'>
+    TEST DONG TITLE USED TO TEST RESPONSIVE OF THE WEB APPLICATION
+  </div>
+  <div class='uploader'>
+    Uploaded by <a href='#'>someone</a>
   </div>
 </div>
 <div class='loading' ng-show='loading'>
