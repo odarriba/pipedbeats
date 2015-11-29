@@ -27,6 +27,7 @@ body {
     }
 
     .input-group {
+      // Responsive only on xs screens
       @media screen and (min-width: $screen-xs-min) {
         display: inline-table;
         vertical-align: middle;
