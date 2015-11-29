@@ -5,11 +5,12 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$state',
     $scope.searchTerms = $stateParams.q || '';
     $scope.searchGenre = $stateParams.genre || '';
     $scope.results = {};
-    $scope.loading = true;
 
     if ($scope.searchTerms === '' || $scope.searchGenre === '') {
       $state.go('start');
     }
+
+    $scope.loading = true;
 
     soundCloud.get('/tracks', { q: $scope.searchTerms, limit: 100 }, function(tracks){
       // Assign results and disable laoding state
