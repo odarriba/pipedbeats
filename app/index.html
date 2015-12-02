@@ -50,18 +50,19 @@
     <div class="container-fluid app-container" ui-view>
     </div>
 
-    <nav class="navbar navbar-player navbar-fixed-bottom">
+    <nav class="navbar navbar-player navbar-fixed-bottom" ng-controller="playerController">
+      <audio id='player-object'></audio>
       <div class="container-fluid">
         <div id="player-controls" class="player-controls">
           <i id="backward" class="fa fa-backward control"></i>
-          <i id="play" class="fa fa-play control"></i>
-          <i id="pause" class="fa fa-pause control hidden"></i>
+          <i id="play" class="fa fa-play control" ng-hide="playing"></i>
+          <i id="pause" class="fa fa-pause control" ng-show="playing"></i>
           <i id="forward" class="fa fa-forward control"></i>
         </div>
         <div id="player-progress" class="player-progress">
-          <div class='current-time'>00:00</div>
+          <div class='current-time'>{{currentTime}}</div>
           <div class="slider"></div>
-          <div class='total-time'>00:00</div>
+          <div class='total-time'>{{totalTime}}</div>
         </div>
         <div id="player-volume" class="hidden-xs player-volume">
           <div class="slider"></div>
