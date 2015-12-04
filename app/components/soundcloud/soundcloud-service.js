@@ -32,6 +32,9 @@ angular.module('pipedBeats').factory('soundCloud', ['$rootScope', function($root
           console.log("[SoundCloud] Error calling to " + url);
           console.log(e);
         });
+    },
+    getStreamingURL : function(track) {
+      return track.stream_url+"?client_id="+$rootScope.soundCloud.clientId;
     }
   };
 }]);

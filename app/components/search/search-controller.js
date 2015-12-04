@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('pipedBeats').controller('searchController', ['$scope', '$state', '$stateParams', 'soundCloud',
-  function($scope, $state, $stateParams, soundCloud) {
+angular.module('pipedBeats').controller('searchController', ['$scope', '$rootScope', '$state', '$stateParams', 'soundCloud',
+  function($scope, $rootScope, $state, $stateParams, soundCloud) {
     $scope.searchTerms = $stateParams.q || '';
     $scope.searchGenre = $stateParams.genre || '';
     $scope.results = {};
@@ -15,8 +15,8 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$state',
     soundCloud.get('/tracks', { q: $scope.searchTerms, limit: 100 }, function(tracks){
       // Assign results and disable laoding state
       $scope.$apply(function () {
-        $scope.results = tracks;
         $scope.loading = false;
+        $rootScope.$broadcast('player.loadPlaylist', tracks);
       });
     });
   }
