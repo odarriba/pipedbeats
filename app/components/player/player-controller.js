@@ -3,6 +3,7 @@
 angular.module('pipedBeats').controller('playerController', ['$scope', 'soundCloud',
   function($scope, soundCloud) {
     $scope.playerObject = $('nav.navbar-player audio#player-object');
+    $scope.playerObject[0].volume = 0.5;
     $scope.playing = false;
 
     $scope.currentList = {};
@@ -11,8 +12,20 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
     $scope.currentTime = "00:00";
     $scope.totalTime = "00:00";
 
+    // Initialize the sliders
+    $scope.volumeSlider = $("nav.navbar-player #player-volume .slider").slider({
+      min: 0,
+      max: 1,
+      value: 0.5,
+      step: 0.01,
+      tooltip: 'show'
+    });
+
+    // Events of the player
     $scope.playerObject.on('timeupdate', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
     $scope.playerObject.on('duration', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
+
+    $scope.volumeSlider.on('slideStop', function(ev){ $scope.$apply(function () { $scope.updateVolume(ev.value); }); });
 
     // Function to ckeck if the player is ready to play
     $scope.playerReady = function() {
@@ -58,6 +71,11 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
 
       $scope.currentTime = parseTime($scope.playerObject[0].currentTime);
       $scope.totalTime = parseTime($scope.playerObject[0].duration);
+    };
+
+    // Function to change the volume value
+    $scope.updateVolume = function(value) {
+      $scope.playerObject[0].volume = value;
     };
 
     // Button function to play the beats.
