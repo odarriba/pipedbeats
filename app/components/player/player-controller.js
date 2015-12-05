@@ -32,6 +32,7 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
     // Events of the player
     $scope.playerObject.on('timeupdate', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
     $scope.playerObject.on('duration', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
+    $scope.playerObject.on('ended', function() { $scope.$apply(function () { $scope.next(); }); });
 
 
     // Function to ckeck if the player is ready to play
