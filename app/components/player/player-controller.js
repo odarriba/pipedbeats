@@ -1,14 +1,10 @@
 'use strict';
 
-angular.module('pipedBeats').controller('playerController', ['$scope', 'soundCloud',
-  function($scope, soundCloud) {
+angular.module('pipedBeats').controller('playerController', ['$scope', 'playerStatus', 'soundCloud',
+  function($scope, playerStatus, soundCloud) {
+    $scope.playerStatus = playerStatus;
     $scope.playerObject = $('nav.navbar-player audio#player-object');
     $scope.playerObject[0].volume = 0.5;
-    $scope.playing = false;
-
-    $scope.sourceList = {};
-    $scope.currentTrackIndex = 0;
-    $scope.playList = [];
 
     $scope.currentTime = "00:00";
     $scope.totalTime = "00:00";
@@ -35,25 +31,14 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
     $scope.playerObject.on('duration', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
     $scope.playerObject.on('ended', function() { $scope.$apply(function () { $scope.next(); }); });
 
-
-    // Function to ckeck if the player is ready to play
-    $scope.playerReady = function() {
-      return ($scope.sourceList.length > 0 && $scope.playList[$scope.currentTrackIndex] !== undefined);
-    };
-
-    // Function to obtain the information about current track
-    $scope.getCurrentTrack = function() {
-      return $scope.playList[$scope.currentTrackIndex];
-    };
-
     // Function to update the track on the player
     $scope.updatePlayerTrack = function() {
-      $scope.playerObject.attr('src', soundCloud.getStreamingURL($scope.getCurrentTrack()));
+      $scope.playerObject.attr('src', soundCloud.getStreamingURL(playerStatus.getCurrentTrack()));
       $scope.playerObject.currentTime = 0;
 
       $scope.updateTimes();
 
-      if ($scope.playing === true){
+      if (playerStatus.isPlaying() === true){
         $scope.play();
       }
     };
@@ -97,42 +82,46 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
 
     // Button function to play the beats.
     $scope.play = function() {
-      if ($scope.playerReady()){
-        $scope.playing = true;
+      if (playerStatus.isReady()){
+        playerStatus.playing = true;
+        playerStatus.notifyChange();
+
         $scope.playerObject[0].play();
       }
     };
 
     // Button function to pause the beats
     $scope.pause = function() {
-      $scope.playing = false;
+      playerStatus.playing = false;
+      playerStatus.notifyChange();
+
       $scope.playerObject[0].pause();
     };
 
     // Button function to go for the next track.
     $scope.next = function() {
       var getNextTrack = function() {
-        var possibleTrack = $scope.sourceList[Math.floor(Math.random()*$scope.sourceList.length)];
+        var possibleTrack = playerStatus.sourceList[Math.floor(Math.random()*playerStatus.sourceList.length)];
 
         // if there is no track yet, return the first coincidence
-        if ($scope.playList.length === 0) {
+        if (playerStatus.playList.length === 0) {
           return possibleTrack;
         }
 
         // If there are more than 10 songs from the source, aplply the check on 10%
-        if ($scope.sourceList.length >= 10) {
+        if (playerStatus.sourceList.length >= 10) {
           // Only check the last X songs, where X is the 10% of the sourceList's length
-          var lastPlayed = $scope.playList.slice(
-            ($scope.playList.length - 1 - Math.ceil($scope.sourceList.lenth*0.1)),
-            ($scope.playList.length - 1) );
+          var lastPlayed = playerStatus.playList.slice(
+            (playerStatus.playList.length - 1 - Math.ceil(playerStatus.sourceList.lenth*0.1)),
+            (playerStatus.playList.length - 1) );
 
           if (lastPlayed.indexOf(possibleTrack) >= 0) {
             return getNextTrack();
           }
         } else {
           // There are between 1 and 10, check that is not directly repeated
-          if ($scope.sourceList.length > 1) {
-            if ($scope.playList[$scope.playList.length-1] === possibleTrack) {
+          if (playerStatus.sourceList.length > 1) {
+            if (playerStatus.playList[playerStatus.playList.length-1] === possibleTrack) {
               return getNextTrack();
             }
           }
@@ -143,22 +132,23 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
       };
 
       // Go to the next song of the playlist
-      $scope.currentTrackIndex++;
+      playerStatus.currentTrackIndex++;
 
       // If we are pointing to a inexistent track,
-      if ($scope.currentTrackIndex === $scope.playList.length) {
-        $scope.playList.push(getNextTrack());
+      if (playerStatus.currentTrackIndex === playerStatus.playList.length) {
+        playerStatus.playList.push(getNextTrack());
       }
 
+      playerStatus.notifyChange();
       $scope.updatePlayerTrack();
     };
 
     // Button function to go for the next track.
     $scope.back = function() {
-      if ($scope.playerObject[0].currentTime > 5 || $scope.currentTrackIndex <= 0) {
+      if ($scope.playerObject[0].currentTime > 5 || playerStatus.currentTrackIndex <= 0) {
         $scope.playerObject[0].currentTime = 0;
       } else {
-        $scope.currentTrackIndex--;
+        playerStatus.currentTrackIndex--;
         $scope.updatePlayerTrack();
       }
 
@@ -168,15 +158,15 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
     // Event handler to load a new playlist from other controllers
     $scope.$on('player.loadPlaylist', function (event, arg) {
       if (typeof arg !== Object) {
-        $scope.sourceList = arg || {};
+        playerStatus.sourceList = arg || {};
       }
       else {
-        $scope.sourceList = {};
+        playerStatus.sourceList = {};
       }
 
-      $scope.playList = [];
+      playerStatus.playList = [];
+      playerStatus.currentTrackIndex = -1;
 
-      $scope.currentTrackIndex = -1;
       $scope.next();
       $scope.play();
     });
