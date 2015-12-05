@@ -43,7 +43,8 @@ $search_result_row_height: 80px;
       box-shadow: 0 0 20px #000;
     }
 
-    .cover-last, .cover-next {
+    .cover-last {
+      margin-right: -100px;
       max-width: 300px;
       max-height: 300px;
       z-index: 20;
@@ -51,12 +52,13 @@ $search_result_row_height: 80px;
       opacity: 0.8;
     }
 
-    .cover-last {
-      margin-right: -100px;
-    }
+    .cover-last-2 {
+      margin-right: -70px;
+      max-width: 200px;
+      max-height: 200px;
+      z-index: 10;
 
-    .cover-next {
-      margin-left: -100px;
+      opacity: 0.5;
     }
   }
 
@@ -80,7 +82,7 @@ $search_result_row_height: 80px;
     width: 100%;
 
     text-align: center;
-    
+
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

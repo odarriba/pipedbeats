@@ -80,7 +80,7 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
       $scope.totalTime = parseTime($scope.playerObject[0].duration);
 
       // Update slider max if needed
-      if ($scope.progressSlider.slider('getMax') != $scope.playerObject[0].duration) {
+      if ($scope.progressSlider.slider('getMax') !== $scope.playerObject[0].duration) {
         $scope.progressSlider.slider('setMax', $scope.playerObject[0].duration);
       }
 
@@ -93,7 +93,7 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
       $scope.playerObject[0].volume = value;
     };
 
-    // Function to change the volume value
+    // Function to change the position value
     $scope.updatePosition = function(value) {
       $scope.playerObject[0].currentTime = value;
     };

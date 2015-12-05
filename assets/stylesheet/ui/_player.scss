@@ -28,10 +28,7 @@
       font-size: 1.8em;
       float: left;
       margin: 0 8px;
-
-      &:hover {
-        color: #333;
-      }
+      color: #333;
 
       &#play, &#pause {
         font-size: 2.5em;
@@ -100,7 +97,7 @@
   }
 }
 
-// Avoid double touch in slides on mobile devices
+// Avoid double touch in slides and buttons on mobile devices
 @media screen and (min-width: $screen-sm-min) {
   .navbar-player {
     .container-fluid {
@@ -124,6 +121,16 @@
         &:hover {
           .slider-handle {
             display: block;
+          }
+        }
+      }
+
+      .player-controls {
+        i.control {
+          color: #777;
+
+          &:hover {
+            color: #333;
           }
         }
       }
