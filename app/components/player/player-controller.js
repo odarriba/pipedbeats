@@ -12,20 +12,27 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
     $scope.currentTime = "00:00";
     $scope.totalTime = "00:00";
 
-    // Initialize the sliders
+    // Initialize the volume slider
     $scope.volumeSlider = $("nav.navbar-player #player-volume .slider").slider({
       min: 0,
       max: 1,
       value: 0.5,
       step: 0.01,
       tooltip: 'show'
-    });
+    }).on('slideStop', function(ev){ $scope.$apply(function () { $scope.updateVolume(ev.value); }); });
+
+    $scope.progressSlider = $("nav.navbar-player #player-progress .slider").slider({
+      min: 0,
+      max: 100,
+      value: 0,
+      step: 1,
+      tooltip: 'show'
+    }).on('slideStop', function(ev){ $scope.$apply(function () { $scope.updatePosition(ev.value); }); });
 
     // Events of the player
     $scope.playerObject.on('timeupdate', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
     $scope.playerObject.on('duration', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
 
-    $scope.volumeSlider.on('slideStop', function(ev){ $scope.$apply(function () { $scope.updateVolume(ev.value); }); });
 
     // Function to ckeck if the player is ready to play
     $scope.playerReady = function() {
@@ -71,11 +78,24 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'soundClo
 
       $scope.currentTime = parseTime($scope.playerObject[0].currentTime);
       $scope.totalTime = parseTime($scope.playerObject[0].duration);
+
+      // Update slider max if needed
+      if ($scope.progressSlider.slider('getMax') != $scope.playerObject[0].duration) {
+        $scope.progressSlider.slider('setMax', $scope.playerObject[0].duration);
+      }
+
+      // Update slider time
+      $scope.progressSlider.slider('setValue', $scope.playerObject[0].currentTime);
     };
 
     // Function to change the volume value
     $scope.updateVolume = function(value) {
       $scope.playerObject[0].volume = value;
+    };
+
+    // Function to change the volume value
+    $scope.updatePosition = function(value) {
+      $scope.playerObject[0].currentTime = value;
     };
 
     // Button function to play the beats.

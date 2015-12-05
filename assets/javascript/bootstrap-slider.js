@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================= */
+'use strict';
 
 !function( $ ) {
 
@@ -283,6 +284,34 @@
 
 		setValue: function(val) {
 			this.value = val;
+
+			if (this.range) {
+				this.value[0] = Math.max(this.min, Math.min(this.max, this.value[0]));
+				this.value[1] = Math.max(this.min, Math.min(this.max, this.value[1]));
+			} else {
+				this.value = [ Math.max(this.min, Math.min(this.max, this.value))];
+				this.handle2.addClass('hide');
+				if (this.selection === 'after') {
+					this.value[1] = this.max;
+				} else {
+					this.value[1] = this.min;
+				}
+			}
+			this.diff = this.max - this.min;
+			this.percentage = [
+				(this.value[0]-this.min)*100/this.diff,
+				(this.value[1]-this.min)*100/this.diff,
+				this.step*100/this.diff
+			];
+			this.layout();
+		},
+
+		getMax: function() {
+			return this.max;
+		},
+
+		setMax: function(val) {
+			this.max = val;
 
 			if (this.range) {
 				this.value[0] = Math.max(this.min, Math.min(this.max, this.value[0]));
