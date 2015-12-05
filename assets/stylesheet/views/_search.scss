@@ -2,7 +2,7 @@ $search_result_row_height: 80px;
 
 .search-results {
   position:fixed;
-  top: 64px;
+  top: 50px;
   bottom: 64px;
   left: 0px;
   right: 0px;
@@ -28,9 +28,10 @@ $search_result_row_height: 80px;
     .cover {
       position: relative;
       border-radius: 5px;
+      overflow: hidden;
 
       img {
-        max-width: 100%;
+        width: 100%;
         height: auto;
         border-radius: 5px;
       }
@@ -49,7 +50,7 @@ $search_result_row_height: 80px;
       max-height: 250px;
       z-index: 20;
 
-      opacity: 0.8;
+      opacity: 0.9;
     }
 
     .cover-last-2 {
@@ -58,7 +59,7 @@ $search_result_row_height: 80px;
       max-height: 180px;
       z-index: 10;
 
-      opacity: 0.5;
+      opacity: 0.6;
     }
   }
 
@@ -118,6 +119,29 @@ $search_result_row_height: 80px;
     i.fa{
       font-size: 2em;
       margin-bottom: 5px;
+    }
+  }
+}
+
+// Avoid double touch in slides and buttons on mobile devices
+@media screen and (max-width: 600px) {
+  .search-results {
+    .covers {
+      .cover-last, .cover-last-2 {
+        display: none;
+      }
+    }
+  }
+}
+
+// Responsive on mobile screens
+@media screen and (max-width: $screen-xs-min) {
+  .search-results {
+    .covers {
+      .cover-current {
+        max-width: 250px;
+        max-height: 250px;
+      }
     }
   }
 }

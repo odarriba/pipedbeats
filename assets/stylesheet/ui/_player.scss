@@ -150,6 +150,10 @@
 
       .player-controls {
         order: 2;
+
+        i.control#play, i.control#pause {
+          font-size: 3em;
+        }
       }
 
       .player-progress {

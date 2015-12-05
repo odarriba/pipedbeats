@@ -21,7 +21,15 @@ angular.module('pipedBeats').factory('playerStatus', function($rootScope) {
   };
 
   playerStatusService.getCurrentTrack = function() {
-    return playerStatusService.playList[playerStatusService.currentTrackIndex];
+    return playerStatusService.getTrack(0);
+  };
+
+  playerStatusService.getTrack = function(index) {
+    index = index || 0;
+
+    if (index < 0 || index > playerStatusService.playList.length-1) { return undefined; }
+
+    return playerStatusService.playList[playerStatusService.currentTrackIndex - index];
   };
 
   return playerStatusService;
