@@ -1,12 +1,4 @@
-body.start {
-  // background-image: url("https://c1.staticflickr.com/9/8019/7196672562_5ee9f27226_o.jpg");
-  // background-size: cover !important;
-  // background-repeat: no-repeat;
-}
-
 .search-container {
-  position: absolute;
-  width: calc(100% - 30px);
   height: calc(100% - 140px);
   text-align: center;
 
@@ -19,7 +11,6 @@ body.start {
     text-shadow: 0px 0px 4px #fff;
     font-weight: lighter;
     font-size: 6em;
-    margin-top: -90px;
 
     @media screen and (max-width: $screen-xs-max) {
       font-size: 4em;
