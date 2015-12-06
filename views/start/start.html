@@ -1,0 +1,67 @@
+<div class="search-container">
+  <h1>Welcome!</h1>
+  <h2>Please, give some terms and we'll find your beats</h2>
+
+  <div class='search-form-container'>
+
+    <ul class="nav nav-tabs">
+      <li role="presentation" ng-class="{active: isTabActive('genre')}"><a ng-click="showTab('genre')">By genre</a></li>
+      <li role="presentation" ng-class="{active: isTabActive('keywords')}"><a ng-click="showTab('keywords')">By keywords</a></li>
+    </ul>
+
+    <div ng-show="isTabActive('genre')">
+      <form class='form search-form form-inline' name="searchFormGenre" ng-submit="doSearch('genre')" ng-search-form>
+        <div class="form-group" ng-class="{'has-error' : (searchFormGenre.searchGenre.$error.required && searchFormGenre.searchGenre.$dirty)}">
+          <select id="search-genre" name="searchGenre" ng-model="searchGenre" type="text" class="form-control input-lg" required>
+            <option value='all'>All genres</option>
+            <option value="alternative+rock">Alternative Rock</option>
+            <option value="ambient">Ambient</option>
+            <option value="classical">Classical</option>
+            <option value="country">Country</option>
+            <option value="dance+&amp;+edm">Dance &amp; EDM</option>
+            <option value="dancehall">Dancehall</option>
+            <option value="deep+house">Deep House</option>
+            <option value="disco">Disco</option>
+            <option value="drum+&amp;+bass">Drum &amp; Bass</option>
+            <option value="dubstep">Dubstep</option>
+            <option value="electronic">Electronic</option>
+            <option value="folk+&amp;+singer-songwriter">Folk &amp; Singer-Songwriter</option>
+            <option value="hip+hop+&amp;+rap">Hip Hop &amp; Rap</option>
+            <option value="house">House</option>
+            <option value="indie">Indie</option>
+            <option value="jazz+&amp;+blues">Jazz &amp; Blues</option>
+            <option value="latin">Latin</option>
+            <option value="metal">Metal</option>
+            <option value="piano">Piano</option>
+            <option value="pop">Pop</option>
+            <option value="r&amp;b+&amp;+soul">R&amp;B &amp; Soul</option>
+            <option value="reggae">Reggae</option>
+            <option value="reggaeton">Reggaeton</option>
+            <option value="rock">Rock</option>
+            <option value="soundtrack">Soundtrack</option>
+            <option value="techno">Techno</option>
+            <option value="trance">Trance</option>
+            <option value="trap">Trap</option>
+            <option value="trip+hop">Trip Hop</option>
+            <option value="world">World
+          </select>
+          <button class="btn btn-success btn-submit btn-lg" type="submit">
+            <i class="fa fa-search"></i><span class='hidden-xs'>&nbsp;Search</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div ng-show="isTabActive('keywords')">
+      <form class='form form-inline search-form' name="searchFormKeywords" ng-submit="doSearch('keywords')" ng-search-form>
+        <div class="form-group" ng-class="{'has-error' : (searchFormKeywords.searchTerms.$error.required && searchFormKeywords.searchTerms.$dirty)}">
+          <input id="search-terms" name="searchTerms" ng-model="searchTerms" type="text" class="form-control input-lg" placeholder="Search beats..." required>
+          <button class="btn btn-success btn-submit btn-lg" type="submit">
+            <i class="fa fa-search"></i><span class='hidden-xs'>&nbsp;Search</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <h5 class='madein'>made with <i class='fa fa-heart'></i> in Asturias - <a ui-sref="about">about us</a></h5>
+</div>
