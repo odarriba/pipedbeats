@@ -1,72 +1,147 @@
 $search_result_row_height: 80px;
 
 .search-results {
-  .page-header {
-    margin-top: 0px;
+  position:fixed;
+  top: 50px;
+  bottom: 64px;
+  left: 0px;
+  right: 0px;
+
+  display:flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  width: 90%;
+  margin: 0 auto;
+
+  .covers {
+    order: 1;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+
+    .cover {
+      position: relative;
+      border-radius: 5px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+      }
+    }
+
+    .cover-current {
+      max-width: 350px;
+      max-height: 350px;
+      z-index: 30;
+      box-shadow: 0 0 20px #000;
+    }
+
+    .cover-last {
+      margin-right: -100px;
+      max-width: 250px;
+      max-height: 250px;
+      z-index: 20;
+
+      opacity: 0.9;
+    }
+
+    .cover-last-2 {
+      margin-right: -100px;
+      max-width: 180px;
+      max-height: 180px;
+      z-index: 10;
+
+      opacity: 0.6;
+    }
   }
 
-  .tracks-container {
-    .track-container {
-      @extend 'col-md-3';
-      padding: 0 7.5px;
-      padding-bottom: 15px;
+  .title {
+    order: 2;
+    width: 100%;
 
-      .track {
-        border: 1px solid #f3f3f3;
+    margin: 15px 0;
 
-        cursor: pointer;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 200;
 
-        &:hover {
-          -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.3);
-          -moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.3);
-          box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.3);
-        }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-        img.cover {
-          width: 100%;
-        }
+  .uploader {
+    order: 3;
+    width: 100%;
 
-        .data {
-          margin: 4px;
+    text-align: center;
 
-          .title {
-            max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 
-            font-size: 1.4em;
-            font-weight: 200;
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
+  z-index: 1020;
 
-          .author {
-            margin-top: 4px;
-            clear: both;
-            overflow: hidden;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
 
-            .avatar {
-              float: left;
-              max-width: 32px;
-              max-height: 32px;
-              padding: 2px;
-              border: 1px solid #ddd;
-            }
+  background-color: rgba(0, 0, 0, 0.5);
 
-            .name {
-              float: left;
+  .indicator {
+    padding: 20px 30px;
 
-              margin-left: 5px;
-              max-width: calc(100% - 37px);
-              line-height: 32px;
+    color: #d3d3d3;
+    font-size: 1.5em;
+    text-align: center;
 
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-            }
-          }
-        }
-      } // .track
-    } // .track-container
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+
+    i.fa{
+      font-size: 2em;
+      margin-bottom: 5px;
+    }
+  }
+}
+
+// Avoid double touch in slides and buttons on mobile devices
+@media screen and (max-width: 600px) {
+  .search-results {
+    .covers {
+      .cover-last, .cover-last-2 {
+        display: none;
+      }
+    }
+  }
+}
+
+// Responsive on mobile screens
+@media screen and (max-width: $screen-xs-min) {
+  .search-results {
+    .covers {
+      .cover-current {
+        max-width: 250px;
+        max-height: 250px;
+      }
+    }
   }
 }

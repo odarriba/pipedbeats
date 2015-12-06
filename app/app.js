@@ -11,6 +11,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('start', {
       url: "/",
+      controller: "startController",
       templateUrl: "../views/start/start.html"
     })
     .state('about', {

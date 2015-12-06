@@ -3,11 +3,40 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Piped Beats is your persona radio. Select some keywords or genre to start listenning random music related to your search for free!">
+    <meta name="author" content="Óscar de Arriba">
     <title>Piped Beats</title>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/assets/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/assets/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="/assets/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/assets/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/assets/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/assets/manifest.json">
+    <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#e04006">
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Piped Beats">
+    <meta name="application-name" content="Piped Beats">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/assets/mstile-144x144.png">
+    <meta name="msapplication-config" content="/assets/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta property="og:title" content="Piped Beats - Music radio just for you." />
+    <meta property="og:site_name" content="Piped Beats"/>
+    <meta property="og:url" content="https://www.pipedbeats.com" />
+    <meta property="og:description" content="Piped Beats is your persona radio. Select some keywords or genre to start listenning random music related to your search for free!" />
+    <meta property="og:image" content="https://www.pipedbeats.com/assets/opengraph.png" />
 
     <!-- vendor css files -->
     <!-- end vendor css files -->
@@ -21,7 +50,7 @@
     <![endif]-->
   </head>
   <body ng-class="$state.current.name">
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -33,11 +62,7 @@
           <a class="navbar-brand" ui-sref="start"><i class="fa fa-music"></i>&nbsp;PipedBeats</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li ui-sref-active="active"><a ui-sref="start">Start</a></li>
-            <li ui-sref-active="active"><a ui-sref="about">About</a></li>
-          </ul>
-          <form class="navbar-form navbar-right search-form" role="search" name="searchForm" ng-search-form>
+          <form class="navbar-form navbar-right search-form" role="search" name="searchForm" ng-submit="doSearch('keywords')" ng-search-form>
             <div class="form-group">
               <div class="input-group" ng-class="{'has-error' : (searchForm.searchTerms.$error.required && searchForm.searchTerms.$dirty)}">
                 <input id="search-terms" name="searchTerms" ng-model="searchTerms" type="text" class="form-control" placeholder="Search beats..." required>
@@ -54,23 +79,21 @@
     <div class="container-fluid app-container" ui-view>
     </div>
 
-    <nav class="navbar navbar-player navbar-fixed-bottom">
+    <nav class="navbar navbar-player navbar-fixed-bottom" ng-controller="playerController">
+      <audio id='player-object'></audio>
       <div class="container-fluid">
-        <div id="player-controls" class="controls">
-          <i id="backward" class="fa fa-backward control"></i>
-          <i id="play" class="fa fa-play control"></i>
-          <i id="pause" class="fa fa-pause control hidden"></i>
-          <i id="forward" class="fa fa-forward control"></i>
+        <div id="player-controls" class="player-controls">
+          <i id="backward" class="fa fa-backward control" ng-click="back();"></i>
+          <i id="play" class="fa fa-play control" ng-hide="playerStatus.playing" ng-click="play()"></i>
+          <i id="pause" class="fa fa-pause control" ng-show="playerStatus.playing" ng-click="pause()"></i>
+          <i id="forward" class="fa fa-forward control" ng-click="next()"></i>
         </div>
-        <div id="player-progress" class="hidden-xs player-progress">
-          <div class='current-time'>00:00</div>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-            </div>
-          </div>
-          <div class='total-time'>00:00</div>
+        <div id="player-progress" class="player-progress">
+          <div class='current-time'>{{currentTime}}</div>
+          <div class="slider"></div>
+          <div class='total-time'>{{totalTime}}</div>
         </div>
-        <div id="player-volume" class="player-volume">
+        <div id="player-volume" class="hidden-xs player-volume">
           <div class="slider"></div>
         </div>
       </div>

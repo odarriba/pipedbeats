@@ -1,26 +1,25 @@
 <div class='search-results'>
-  <div class='row'>
-    <div class='col-md-3'>
-      Hehe
+  <div class='covers'>
+    <div class='cover cover-last-2'>
+      <img ng-src="{{lastLastCover || '/assets/default-cover.png'}}" />
     </div>
-    <div class='col-md-9'>
-      <div class="page-header">
-        <h1>Search results <small>{{searchGenre}} music with '{{searchTerms}}'</small></h1>
-      </div>
-      <div class='row tracks-container'>
-        <div class='track-container col-md-3' ng-repeat="track in results">
-          <div class='track'>
-            <img class='cover' ng-src="{{track.artwork_url.replace('large','t500x500') || '/assets/default-cover.png'}}" />
-            <div class='data'>
-              <div class='title'>{{track.title}}</div>
-              <div class='author'>
-                <img class='avatar' ng-src="{{track.user.avatar_url}}" />
-                <span class='name'>{{track.user.username}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class='cover cover-last'>
+      <img ng-src="{{lastCover || '/assets/default-cover.png'}}" />
     </div>
+    <div class='cover cover-current'>
+      <img ng-src="{{currentCover || '/assets/default-cover.png'}}" />
+    </div>
+  </div>
+  <div class='title'>
+    {{currentTrackTitle}}
+  </div>
+  <div class='uploader'>
+    Uploaded by <a ng-href="{{currentTrackAuthorUrl}}" target="_blank">{{currentTrackAuthor}}</a>
+  </div>
+</div>
+<div class='loading' ng-show='loading'>
+  <div class='indicator'>
+    <i class="fa fa-cog fa-spin"></i><br />
+    Searching...
   </div>
 </div>
