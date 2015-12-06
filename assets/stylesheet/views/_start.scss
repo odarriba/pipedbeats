@@ -78,3 +78,19 @@ body.start {
     }
   }
 }
+
+// Responsive on small screens
+@media screen and (max-width: $screen-sm-min) {
+  .search-container {
+    .search-form-container {
+      input, select {
+        display: inline-block;
+        width: calc(100% - 64px) !important;
+      }
+
+      .btn-submit {
+        margin-top: -4px;
+      }
+    }
+  }
+}
