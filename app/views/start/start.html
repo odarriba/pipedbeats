@@ -1,16 +1,37 @@
 <div class="search-container">
   <h1>Welcome!</h1>
   <h2>Please, give some terms and we'll find your beats</h2>
-  <form class='form search-form' name="searchForm" ng-submit="doSearch()" ng-search-form>
-    <div class="form-group">
-      <div class="input-group" ng-class="{'has-error' : (searchForm.searchTerms.$error.required && searchForm.searchTerms.$dirty)}">
-        <input id="search-terms" name="searchTerms" ng-model="searchTerms" type="text" class="form-control input-lg" placeholder="Search beats..." required>
-        <span class="input-group-btn">
+
+  <div class='search-form-container'>
+
+    <ul class="nav nav-tabs">
+      <li role="presentation" ng-class="{active: isTabActive('genre')}"><a ng-click="showTab('genre')">By genre</a></li>
+      <li role="presentation" ng-class="{active: isTabActive('keywords')}"><a ng-click="showTab('keywords')">By keywords</a></li>
+    </ul>
+
+    <div ng-show="isTabActive('genre')">
+      <form class='form search-form form-inline' name="searchFormGenre" ng-submit="doSearch('genre')" ng-search-form>
+        <div class="form-group" ng-class="{'has-error' : (searchFormGenre.searchGenre.$error.required && searchFormGenre.searchGenre.$dirty)}">
+          <select id="search-genre" name="searchGenre" ng-model="searchGenre" type="text" class="form-control input-lg" required>
+            <option value='all'>All genres</option>
+            <option value='dance'>Dance</option>
+          </select>
           <button class="btn btn-success btn-submit btn-lg" type="submit">
             <i class="fa fa-search"></i><span class='hidden-xs'>&nbsp;Search</span>
           </button>
-        </span>
-      </div>
+        </div>
+      </form>
     </div>
-  </form>
+
+    <div ng-show="isTabActive('keywords')">
+      <form class='form form-inline search-form' name="searchFormKeywords" ng-submit="doSearch('keywords')" ng-search-form>
+        <div class="form-group" ng-class="{'has-error' : (searchFormKeywords.searchTerms.$error.required && searchFormKeywords.searchTerms.$dirty)}">
+          <input id="search-terms" name="searchTerms" ng-model="searchTerms" type="text" class="form-control input-lg" placeholder="Search beats..." required>
+          <button class="btn btn-success btn-submit btn-lg" type="submit">
+            <i class="fa fa-search"></i><span class='hidden-xs'>&nbsp;Search</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

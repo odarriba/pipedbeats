@@ -33,7 +33,7 @@
           <a class="navbar-brand" ui-sref="start"><i class="fa fa-music"></i>&nbsp;PipedBeats</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-          <form class="navbar-form navbar-right search-form" role="search" name="searchForm" ng-search-form>
+          <form class="navbar-form navbar-right search-form" role="search" name="searchForm" ng-submit="doSearch('keywords')" ng-search-form>
             <div class="form-group">
               <div class="input-group" ng-class="{'has-error' : (searchForm.searchTerms.$error.required && searchForm.searchTerms.$dirty)}">
                 <input id="search-terms" name="searchTerms" ng-model="searchTerms" type="text" class="form-control" placeholder="Search beats..." required>

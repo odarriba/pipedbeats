@@ -8,20 +8,32 @@ angular.module('pipedBeats').directive('ngSearchForm', function() {
       $scope.searchTerms = '';
       $scope.searchGenre = 'all';
 
-      $scope.doSearch = function() {
-        if ($scope.searchTerms !== '') {
-          $state.go('search', {genre: $scope.searchGenre, q: $scope.searchTerms});
+      $scope.doSearch = function(filter)  {
+        var callHash = {};
+
+        if (filter === 'keywords') {
+          callHash.q = $scope.searchTerms;
+          callHash.genre = 'all';
+        } else {
+          if (filter === 'genre') {
+            callHash.genre = $scope.searchGenre;
+          }
+          else {
+            callHash.q = $scope.searchTerms;
+            callHash.genre = $scope.searchGenre;
+          }
+        }
+
+        if (callHash !== {}) {
+          $state.go('search', callHash);
           $scope.searchTerms = '';
+          $scope.searchGenre = 'all';
         }
       };
     }],
     link: function(scope , element , attributes) {
       // Add novalidate to the form element.
       attributes.$set('novalidate' , 'novalidate');
-      element.bind('submit', function(e) {
-        e.preventDefault();
-        scope.doSearch();
-      });
     }
   };
 });
