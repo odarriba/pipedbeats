@@ -157,18 +157,26 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
 
     // Event handler to load a new playlist from other controllers
     $scope.$on('player.loadPlaylist', function (event, arg) {
-      if (typeof arg !== Object) {
-        playerStatus.sourceList = arg || {};
-      }
-      else {
-        playerStatus.sourceList = {};
-      }
+      if (typeof arg === 'object') {
+        playerStatus.sourceList = [];
 
-      playerStatus.playList = [];
-      playerStatus.currentTrackIndex = -1;
+        // Only use valid results
+        for (var i in arg) {
+          if (arg[i].stream_url !== undefined &&
+            arg[i].sharing === 'public' &&
+            arg[i].streamable === true &&
+            arg[i].state === 'finished'
+          ){
+            playerStatus.sourceList.push(arg[i]);
+          }
+        }
 
-      $scope.next();
-      $scope.play();
+        playerStatus.playList = [];
+        playerStatus.currentTrackIndex = -1;
+
+        $scope.next();
+        $scope.play();
+      }
     });
   }
 ]);
