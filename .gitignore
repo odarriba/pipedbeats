@@ -5,6 +5,7 @@ build/**/*
 !build/.gitkeep
 dist/**/*
 !dist/.gitkeep
+.publish
 
 
 ### Bower ###
