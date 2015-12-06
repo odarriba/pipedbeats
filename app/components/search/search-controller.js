@@ -14,13 +14,18 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
     $scope.lastCover = "";
     $scope.lastLastCover = "";
 
-    if ($scope.searchTerms === '' || $scope.searchGenre === '') {
+    if ($scope.searchTerms === '' && $scope.searchGenre === '') {
       $state.go('start');
     }
 
     $scope.loading = true;
 
-    soundCloud.get('/tracks', { q: $scope.searchTerms, limit: 100 }, function(tracks){
+    var callHash = {};
+
+    if ($scope.searchTerms !== '') { callHash.q = $scope.searchTerms; }
+    if ($scope.searchGenre !== '' && $scope.searchGenre !== 'all') { callHash.genres = $scope.searchGenre; }
+
+    soundCloud.get('/tracks', callHash, function(tracks){
       // Assign results and disable laoding state
       $scope.$apply(function () {
         $scope.loading = false;
