@@ -8,6 +8,7 @@ var gulp = require('gulp'),
     inject = require('gulp-inject'),
     angularFilesort = require('gulp-angular-filesort'),
     clean = require('gulp-clean'),
+    ghPages = require('gulp-gh-pages'),
     browserSync = require('browser-sync'),
     es = require('event-stream');
 
@@ -180,6 +181,12 @@ gulp.task('inject:dist', ['vendor:dist', 'css:dist', 'js:dist', 'other:dist', 'a
 // BUILD TASKS
 gulp.task('build', ['clean:build', 'vendor:build', 'css:build', 'js:build', 'other:build', 'app:build', 'inject:build']);
 gulp.task('dist', ['clean:dist', 'vendor:dist', 'css:dist', 'js:dist', 'other:dist', 'app:dist', 'inject:dist']);
+
+// DEPLOY TASK
+gulp.task('deploy', ['dist'], function(){
+  return gulp.src(distPath+'**/*')
+    .pipe(ghPages());
+});
 
 // WATCH TASK
 gulp.task('watch', ['build'], function() {
