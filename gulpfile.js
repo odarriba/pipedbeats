@@ -3,6 +3,7 @@
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
     minifyCss = require("gulp-minify-css"),
+    uglify = require('gulp-uglify'),
     mainBowerFiles = require('main-bower-files'),
     concat = require('gulp-concat'),
     inject = require('gulp-inject'),
@@ -55,8 +56,13 @@ var processes = {
     return files.pipe(gulp.dest(path+assetsPath.css));
   },
   buildJs : function (path) {
-    return gulp.src(inputFiles.js)
-            .pipe(gulp.dest(path+assetsPath.js));
+    var files = gulp.src(inputFiles.js);
+
+    if (path === distPath) {
+      files = files.pipe(uglify());
+    }
+
+    return files.pipe(gulp.dest(path+assetsPath.js));
   },
   buildOther : function(path) {
     return gulp.src(inputFiles.other)
@@ -67,9 +73,14 @@ var processes = {
   },
   buildVendors : function(path) {
     // Compile the JS
-    gulp.src(mainBowerFiles({filter: '**/*.js'}))
-      .pipe(concat('vendors.js'))
-      .pipe(gulp.dest(path+assetsPath.js));
+    var jsFiles = gulp.src(mainBowerFiles({filter: '**/*.js'}))
+      .pipe(concat('vendors.js'));
+
+    if (path === distPath) {
+      jsFiles = jsFiles.pipe(uglify());
+    }
+
+    jsFiles.pipe(gulp.dest(path+assetsPath.js));
 
     // Compile the SASS and CSS
     var cssFiles = es.merge(gulp.src(mainBowerFiles({filter: '**/*.css'})), gulp.src(mainBowerFiles({filter: '**/*.scss'})).pipe(sass().on('error', sass.logError)))
