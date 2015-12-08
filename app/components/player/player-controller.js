@@ -9,6 +9,8 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
     $scope.currentTime = "00:00";
     $scope.totalTime = "00:00";
 
+    $scope.trackQuarter = 0;
+
     // Initialize the volume slider
     $scope.volumeSlider = $("nav.navbar-player #player-volume .slider").slider({
       min: 0,
@@ -27,17 +29,22 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
     }).on('slideStop', function(ev){ $scope.$apply(function () { $scope.updatePosition(ev.value); }); });
 
     // Events of the player
-    $scope.playerObject.on('timeupdate', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
-    $scope.playerObject.on('duration', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
-    $scope.playerObject.on('ended', function() {
-      dataLayer.push({
-        "event" : "player",
-        "eventAction" : "ended",
-        "eventLabel" : playerStatus.getCurrentTrack().title
+    $scope.playerObject.on('timeupdate', function() {
+      $scope.$apply(function () {
+        $scope.updateTimes();
       });
+    });
+    $scope.playerObject.on('duration', function() {
+      $scope.$apply(function () {
+        $scope.updateTimes();
+      });
+    });
+    $scope.playerObject.on('ended', function() {
+      // Send to GTM the track finish event
+      $scope.sendDataLayer("ended");
 
       $scope.$apply(function () {
-        $scope.next();
+        $scope.next(true);
       });
     });
 
@@ -72,6 +79,13 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
       $scope.currentTime = parseTime($scope.playerObject[0].currentTime);
       $scope.totalTime = parseTime($scope.playerObject[0].duration);
 
+      var quarter = ($scope.playerObject[0].currentTime*4.0)/$scope.playerObject[0].duration;
+
+      if (quarter >= $scope.trackQuarter+1) {
+        $scope.trackQuarter++;
+        $scope.sendDataLayer("quarter"+$scope.trackQuarter);
+      }
+
       // Update slider time and max (if needed)
       $scope.progressSlider.slider('setValue', $scope.playerObject[0].currentTime);
 
@@ -98,11 +112,8 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
 
         $scope.playerObject[0].play();
 
-        dataLayer.push({
-          "event" : "player",
-          "eventAction" : "play",
-          "eventLabel" : playerStatus.getCurrentTrack().title
-        });
+        // Send pause event to GTM
+        $scope.sendDataLayer("play");
       }
     };
 
@@ -113,16 +124,13 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
 
       $scope.playerObject[0].pause();
 
-      dataLayer.push({
-        "event" : "player",
-        "eventAction" : "pause",
-        "eventLabel" : playerStatus.getCurrentTrack().title
-      });
+      // Send pause event to GTM
+      $scope.sendDataLayer("pause");
     };
 
     // Button function to go for the next track.
-    $scope.next = function(fromUser) {
-      fromUser = fromUser || false;
+    $scope.next = function(finishedTrack) {
+      finishedTrack = finishedTrack || false;
 
       var getNextTrack = function() {
         var possibleTrack = playerStatus.sourceList[Math.floor(Math.random()*playerStatus.sourceList.length)];
@@ -155,12 +163,9 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
         return possibleTrack;
       };
 
-      if (fromUser) {
-        dataLayer.push({
-          "event" : "player",
-          "eventAction" : "skip",
-          "eventLabel" : playerStatus.getCurrentTrack().title
-        });
+      // Send skip event to GTM only if the track isn't finished
+      if (finishedTrack !== true) {
+        $scope.sendDataLayer("skip");
       }
 
       // Go to the next song of the playlist
@@ -179,19 +184,28 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
     $scope.back = function() {
       if ($scope.playerObject[0].currentTime > 5 || playerStatus.currentTrackIndex <= 0) {
         $scope.playerObject[0].currentTime = 0;
+
+        // Send startOver event to GTM
+        $scope.sendDataLayer("startOver");
+
       } else {
         playerStatus.currentTrackIndex--;
         $scope.updatePlayerTrack();
-      }
 
-      dataLayer.push({
-        "event" : "player",
-        "eventAction" : "previous",
-        "eventLabel" : playerStatus.getCurrentTrack().title
-      });
+        // Send previous event to GTM
+        $scope.sendDataLayer("previous");
+      }
 
       return true;
     };
+
+    $scope.sendDataLayer = function(action) {
+      dataLayer.push({
+        "event" : "player",
+        "eventAction" : action,
+        "eventLabel" : playerStatus.getCurrentTrack().title
+      });
+    }
 
     // Event handler to load a new playlist from other controllers
     $scope.$on('player.loadPlaylist', function (event, arg) {
