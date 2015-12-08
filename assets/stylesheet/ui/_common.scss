@@ -29,21 +29,7 @@ body {
     }
 
     .input-group {
-      // Responsive only on xs screens
-      @media screen and (min-width: $screen-xs-min) {
-        display: inline-table;
-        vertical-align: middle;
-
-        input {
-          width: 100%;
-          display: inline-block;
-          vertical-align: middle;
-        }
-
-        .input-group-btn {
-          width: auto;
-        }
-      }
+      
 
       input {
         color: $navbar-default-color !important;
