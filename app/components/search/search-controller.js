@@ -25,6 +25,12 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
     if ($scope.searchTerms !== '') { callHash.q = $scope.searchTerms; }
     if ($scope.searchGenre !== '' && $scope.searchGenre !== 'all') { callHash.genres = $scope.searchGenre; }
 
+    dataLayer.push({
+      "event" : "search",
+      "searchGenre" : $scope.searchGenre,
+      "searchKeywords" : $scope.searchTerms
+    });
+
     soundCloud.get('/tracks', callHash, function(tracks){
       // Assign results and disable laoding state
       $scope.$apply(function () {
