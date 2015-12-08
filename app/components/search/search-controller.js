@@ -4,6 +4,7 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
   function($scope, $rootScope, $state, $stateParams, playerStatus, soundCloud) {
     $scope.searchTerms = $stateParams.q || '';
     $scope.searchGenre = $stateParams.genre || '';
+    $scope.doSearch = $stateParams.doSearch;
     $scope.results = {};
 
     $scope.currentTrackTitle = "";
@@ -13,31 +14,6 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
     $scope.currentCover = "";
     $scope.lastCover = "";
     $scope.lastLastCover = "";
-
-    if ($scope.searchTerms === '' && $scope.searchGenre === '') {
-      $state.go('start');
-    }
-
-    $scope.loading = true;
-
-    var callHash = {};
-
-    if ($scope.searchTerms !== '') { callHash.q = $scope.searchTerms; }
-    if ($scope.searchGenre !== '' && $scope.searchGenre !== 'all') { callHash.genres = $scope.searchGenre; }
-
-    dataLayer.push({
-      "event" : "search",
-      "searchGenre" : $scope.searchGenre,
-      "searchKeywords" : $scope.searchTerms
-    });
-
-    soundCloud.get('/tracks', callHash, function(tracks){
-      // Assign results and disable laoding state
-      $scope.$apply(function () {
-        $scope.loading = false;
-        $rootScope.$broadcast('player.loadPlaylist', tracks);
-      });
-    });
 
     $scope.$on('playerStatus.change', function() {
       $scope.currentTrackTitle = playerStatus.getCurrentTrack().title;
@@ -55,6 +31,41 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
         }
       }
     });
+
+    if ($scope.searchTerms === '' && $scope.searchGenre === '') {
+      $state.go('start');
+    }
+
+    if ($scope.doSearch === true) {
+      $scope.loading = true;
+
+      var callHash = {};
+
+      if ($scope.searchTerms !== '') { callHash.q = $scope.searchTerms; }
+      if ($scope.searchGenre !== '' && $scope.searchGenre !== 'all') { callHash.genres = $scope.searchGenre; }
+
+      dataLayer.push({
+        "event" : "search",
+        "searchGenre" : $scope.searchGenre,
+        "searchKeywords" : $scope.searchTerms
+      });
+
+      soundCloud.get('/tracks', callHash, function(tracks){
+        // Assign results and disable laoding state
+        $scope.$apply(function () {
+          $scope.loading = false;
+          $rootScope.$broadcast('player.loadPlaylist', tracks);
+
+          // Store as current search params
+          $rootScope.currentSearch = {
+            searchGenre : $scope.searchGenre,
+            searchTerms : $scope.searchTerms
+          };
+        });
+      });
+    } else {
+      playerStatus.notifyChange();
+    }
   }
 ])
 .config(['$stateProvider', '$urlMatcherFactoryProvider',
@@ -66,7 +77,8 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
     .state('search', {
       url: "/search/:genre/?q",
       templateUrl: "../views/search/search.html",
-      controller: 'searchController as searchCtrl'
+      controller: 'searchController as searchCtrl',
+      params: {doSearch : true}
     });
   }
 ]);
