@@ -171,3 +171,31 @@ body.search {
     }
   }
 }
+
+@media screen and (min-width: 1350px) and (min-height: 800px){
+  .search-results {
+    .covers {
+      margin-bottom: 20px;
+
+      .cover-current {
+        img {
+          width: 500px;
+        }
+      }
+
+      .cover-last {
+        margin-right: -12em;
+        img {
+          width: 400px;
+        }
+      }
+
+      .cover-last-2 {
+        margin-right: -12em;
+        img {
+          width: 300px;
+        }
+      }
+    }
+  }
+}
