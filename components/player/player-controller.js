@@ -9,6 +9,8 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
     $scope.currentTime = "00:00";
     $scope.totalTime = "00:00";
 
+    $scope.sliderFreeze = false;
+
     // Initialize the volume slider
     $scope.volumeSlider = $("nav.navbar-player #player-volume .slider").slider({
       min: 0,
@@ -16,7 +18,7 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
       value: 0.5,
       step: 0.01,
       tooltip: 'show'
-    }).on('slideStop', function(ev){ $scope.$apply(function () { $scope.updateVolume(ev.value); }); });
+    }).on('slide', function(ev){ $scope.$apply(function () { $scope.updateVolume(ev.value); }); });
 
     $scope.progressSlider = $("nav.navbar-player #player-progress .slider").slider({
       min: 0,
@@ -24,7 +26,7 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
       value: 0,
       step: 1,
       tooltip: 'show'
-    }).on('slideStop', function(ev){ $scope.$apply(function () { $scope.updatePosition(ev.value); }); });
+    }).on('slide', function(ev){ $scope.$apply(function () { $scope.updatePosition(ev.value); }); });
 
     // Events of the player
     $scope.playerObject.on('timeupdate', function() {
@@ -33,9 +35,11 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
       });
     });
     $scope.playerObject.on('duration', function() {
-      $scope.$apply(function () {
-        $scope.updateTimes();
-      });
+      if ($scope.sliderFreeze == false) {
+        $scope.$apply(function () {
+          $scope.updateTimes();
+        });
+      }
     });
     $scope.playerObject.on('ended', function() {
       // Send to GTM the track finish event
@@ -93,7 +97,8 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
 
     // Function to change the position value
     $scope.updatePosition = function(value) {
-      $scope.playerObject[0].currentTime = value;
+      console.log(value);
+      $scope.playerObject[0].currentTime = Math.round(value);
     };
 
     // Button function to play the beats.
