@@ -9,8 +9,6 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
     $scope.currentTime = "00:00";
     $scope.totalTime = "00:00";
 
-    $scope.trackQuarter = 0;
-
     // Initialize the volume slider
     $scope.volumeSlider = $("nav.navbar-player #player-volume .slider").slider({
       min: 0,
@@ -53,6 +51,7 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
       $scope.playerObject.attr('src', soundCloud.getStreamingURL(playerStatus.getCurrentTrack()));
       $scope.playerObject.currentTime = 0;
 
+      playerStatus.notifyChange();
       $scope.updateTimes();
 
       if (playerStatus.isPlaying() === true){
@@ -78,13 +77,6 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
 
       $scope.currentTime = parseTime($scope.playerObject[0].currentTime);
       $scope.totalTime = parseTime($scope.playerObject[0].duration);
-
-      var quarter = ($scope.playerObject[0].currentTime*4.0)/$scope.playerObject[0].duration;
-
-      if (quarter >= $scope.trackQuarter+1) {
-        $scope.trackQuarter++;
-        $scope.sendDataLayer("quarter"+$scope.trackQuarter);
-      }
 
       // Update slider time and max (if needed)
       $scope.progressSlider.slider('setValue', $scope.playerObject[0].currentTime);
@@ -176,7 +168,6 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
         playerStatus.playList.push(getNextTrack());
       }
 
-      playerStatus.notifyChange();
       $scope.updatePlayerTrack();
     };
 
@@ -190,11 +181,12 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
 
       } else {
         playerStatus.currentTrackIndex--;
-        $scope.updatePlayerTrack();
 
         // Send previous event to GTM
         $scope.sendDataLayer("previous");
       }
+
+      $scope.updatePlayerTrack();
 
       return true;
     };
@@ -226,7 +218,7 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
         playerStatus.playList = [];
         playerStatus.currentTrackIndex = -1;
 
-        $scope.next();
+        $scope.next(true);
         $scope.play();
       }
     });
