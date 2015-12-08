@@ -24,11 +24,26 @@ app.run(['$rootScope', '$state', '$stateParams',
   function ($rootScope,   $state,   $stateParams) {
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
+    $rootScope.gtm = {referrerSended : false};
 
     $rootScope.config = {
       soundCloud : {
         clientId : 'b1d604e6c71ffb73a022a80766d869f1'
       }
     };
+
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+      var dataLayerView = {
+        "event" : "pageView",
+        "pageName" : event.currentScope.$state.href(toState, toParams)
+      };
+
+      if (event.currentScope.$root.gtm.referrerSended !== true) {
+        dataLayerView.pageReferrer = document.referrer;
+        event.currentScope.$root.gtm.referrerSended = true;
+      }
+
+      dataLayer.push(dataLayerView);
+    });
   }
 ]);
