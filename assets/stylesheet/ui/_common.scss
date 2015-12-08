@@ -16,7 +16,11 @@ body {
 .navbar {
   &.navbar-default {
     box-shadow: none;
-    border-bottom: 1px solid $navbar-default-color
+    border-bottom: 1px solid $navbar-default-color;
+
+    .navbar-brand:focus {
+      color: $navbar-default-link-color;
+    }
   }
 
   .search-form {
@@ -29,8 +33,6 @@ body {
     }
 
     .input-group {
-      
-
       input {
         color: $navbar-default-color !important;
         border-radius: 30px;
