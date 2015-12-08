@@ -74,6 +74,10 @@
           <a class="navbar-brand" ui-sref="start"><i class="fa fa-music"></i>&nbsp;PipedBeats</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li ng-class="{'active' : ($state.current.name === 'start')}"><a ui-sref="start()">Start</a></li>
+            <li ng-show="currentSearch !== undefined" ng-class="{'active' : ($state.current.name === 'search')}"><a ui-sref="search({q: currentSearch.searchTerms, genre: currentSearch.searchGenre, recoverSearch: true})">Current beats</a></li>
+          </ul>
           <form class="navbar-form navbar-right search-form" role="search" name="searchForm" ng-submit="doSearch('keywords')" ng-search-form>
             <div class="form-group">
               <div class="input-group" ng-class="{'has-error' : (searchForm.searchTerms.$error.required && searchForm.searchTerms.$dirty)}">
@@ -115,14 +119,14 @@
     <script src="assets/js/vendors.js"></script>
     <!-- end vendor js files -->
     <!-- js files -->
+    <script src="assets/js/bootstrap-slider.js"></script>
     <script src="app.js"></script>
-    <script src="components/start/start-controller.js"></script>
     <script src="components/soundcloud/soundcloud-service.js"></script>
+    <script src="components/start/start-controller.js"></script>
     <script src="components/search/search-directive.js"></script>
     <script src="components/search/search-controller.js"></script>
     <script src="components/player/player-status-service.js"></script>
     <script src="components/player/player-controller.js"></script>
-    <script src="assets/js/bootstrap-slider.js"></script>
     <script src="initializers/soundcloud.js"></script>
     <!-- end js files -->
   </body>
