@@ -96,7 +96,7 @@
           <i id="backward" class="fa fa-backward control" ng-click="back();"></i>
           <i id="play" class="fa fa-play control" ng-hide="playerStatus.playing" ng-click="play()"></i>
           <i id="pause" class="fa fa-pause control" ng-show="playerStatus.playing" ng-click="pause()"></i>
-          <i id="forward" class="fa fa-forward control" ng-click="next()"></i>
+          <i id="forward" class="fa fa-forward control" ng-click="next(true)"></i>
         </div>
         <div id="player-progress" class="player-progress">
           <div class='current-time'>{{currentTime}}</div>

@@ -29,7 +29,17 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
     // Events of the player
     $scope.playerObject.on('timeupdate', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
     $scope.playerObject.on('duration', function() { $scope.$apply(function () { $scope.updateTimes(); }); });
-    $scope.playerObject.on('ended', function() { $scope.$apply(function () { $scope.next(); }); });
+    $scope.playerObject.on('ended', function() {
+      dataLayer.push({
+        "event" : "player",
+        "eventAction" : "ended",
+        "eventLabel" : playerStatus.getCurrentTrack().title
+      });
+
+      $scope.$apply(function () {
+        $scope.next();
+      });
+    });
 
     // Function to update the track on the player
     $scope.updatePlayerTrack = function() {
@@ -87,6 +97,12 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
         playerStatus.notifyChange();
 
         $scope.playerObject[0].play();
+
+        dataLayer.push({
+          "event" : "player",
+          "eventAction" : "play",
+          "eventLabel" : playerStatus.getCurrentTrack().title
+        });
       }
     };
 
@@ -96,10 +112,18 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
       playerStatus.notifyChange();
 
       $scope.playerObject[0].pause();
+
+      dataLayer.push({
+        "event" : "player",
+        "eventAction" : "pause",
+        "eventLabel" : playerStatus.getCurrentTrack().title
+      });
     };
 
     // Button function to go for the next track.
-    $scope.next = function() {
+    $scope.next = function(fromUser) {
+      fromUser = fromUser || false;
+
       var getNextTrack = function() {
         var possibleTrack = playerStatus.sourceList[Math.floor(Math.random()*playerStatus.sourceList.length)];
 
@@ -131,6 +155,14 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
         return possibleTrack;
       };
 
+      if (fromUser) {
+        dataLayer.push({
+          "event" : "player",
+          "eventAction" : "skip",
+          "eventLabel" : playerStatus.getCurrentTrack().title
+        });
+      }
+
       // Go to the next song of the playlist
       playerStatus.currentTrackIndex++;
 
@@ -151,6 +183,12 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
         playerStatus.currentTrackIndex--;
         $scope.updatePlayerTrack();
       }
+
+      dataLayer.push({
+        "event" : "player",
+        "eventAction" : "previous",
+        "eventLabel" : playerStatus.getCurrentTrack().title
+      });
 
       return true;
     };
