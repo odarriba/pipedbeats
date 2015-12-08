@@ -4,7 +4,7 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
   function($scope, $rootScope, $state, $stateParams, playerStatus, soundCloud) {
     $scope.searchTerms = $stateParams.q || '';
     $scope.searchGenre = $stateParams.genre || '';
-    $scope.doSearch = $stateParams.doSearch;
+    $scope.recoverSearch = $stateParams.recoverSearch || false;
     $scope.results = {};
 
     $scope.currentTrackTitle = "";
@@ -32,11 +32,13 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
       }
     });
 
+    // If there is no search params, return to the start.
     if ($scope.searchTerms === '' && $scope.searchGenre === '') {
       $state.go('start');
     }
 
-    if ($scope.doSearch === true) {
+    // Need to do the search or it's a recovery of the latest one?
+    if ($scope.recoverSearch !== true) {
       $scope.loading = true;
 
       var callHash = {};
@@ -44,6 +46,7 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
       if ($scope.searchTerms !== '') { callHash.q = $scope.searchTerms; }
       if ($scope.searchGenre !== '' && $scope.searchGenre !== 'all') { callHash.genres = $scope.searchGenre; }
 
+      // Track the search
       dataLayer.push({
         "event" : "search",
         "searchGenre" : $scope.searchGenre,
@@ -64,6 +67,13 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
         });
       });
     } else {
+      // Track the search recovery
+      dataLayer.push({
+        "event" : "recoverSearch",
+        "searchGenre" : $scope.searchGenre,
+        "searchKeywords" : $scope.searchTerms
+      });
+
       playerStatus.notifyChange();
     }
   }
@@ -78,7 +88,7 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
       url: "/search/:genre/?q",
       templateUrl: "../views/search/search.html",
       controller: 'searchController as searchCtrl',
-      params: {doSearch : true}
+      params: {recoverSearch : false}
     });
   }
 ]);
