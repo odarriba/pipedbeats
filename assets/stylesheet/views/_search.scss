@@ -8,24 +8,20 @@ body.search {
 }
 
 .search-results {
-  position:fixed;
-  top: 50px;
-  bottom: 64px;
-  left: 0px;
-  right: 0px;
 
   display:flex;
   align-items: center;
   align-content: center;
-  justify-content: center;
+  justify-content: space-around;
   flex-wrap: wrap;
 
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
 
   .covers {
     order: 1;
     width: 100%;
+    height: calc(100% - 56px);
 
     display: flex;
     align-items: center;
@@ -151,6 +147,30 @@ body.search {
       .cover-last, .cover-last-2 {
         display: none;
       }
+    }
+  }
+}
+
+// Avoid problems in extra small screens
+@media screen and (max-width: $screen-xs-max) {
+  .search-results {
+    .covers {
+      .cover-current {
+        width: 80%;
+        height: 80%;
+
+        max-height: 250px;
+        max-width: 250px;
+      }
+    }
+
+    .title {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+
+    .uploader {
+      font-size: 0.8em;
     }
   }
 }
