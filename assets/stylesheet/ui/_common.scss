@@ -73,7 +73,7 @@ h5.madein {
 }
 
 // Responsive on small screens
-@media screen and (max-width: $screen-sm-min) {
+@media screen and (max-width: $screen-xs-min) {
   body {
     padding-bottom: 120px;
   }
