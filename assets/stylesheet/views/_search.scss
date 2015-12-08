@@ -140,7 +140,11 @@ body.search {
   }
 }
 
-// Avoid double touch in slides and buttons on mobile devices
+/*
+ * COVERS HACKING
+ */
+
+// Hide last covers in mobile screens
 @media screen and (max-width: 600px) {
   .search-results {
     .covers {
@@ -151,7 +155,7 @@ body.search {
   }
 }
 
-// Avoid problems in extra small screens
+// Re-scale current cover on extra-small screens
 @media screen and (max-width: $screen-xs-min) {
   .search-results {
     .covers {
@@ -172,6 +176,7 @@ body.search {
   }
 }
 
+// Scale the covers on extra large screens
 @media screen and (min-width: 1350px) and (min-height: 800px){
   .search-results {
     .covers {
