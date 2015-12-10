@@ -41,7 +41,7 @@ angular.module('pipedBeats').controller('searchController', ['$scope', '$rootSco
     if ($scope.recoverSearch !== true) {
       $scope.loading = true;
 
-      var callHash = {};
+      var callHash = { "limit" : 200 };
 
       if ($scope.searchTerms !== '') { callHash.q = $scope.searchTerms; }
       if ($scope.searchGenre !== '' && $scope.searchGenre !== 'all') { callHash.genres = $scope.searchGenre; }
