@@ -137,7 +137,7 @@ angular.module('pipedBeats').controller('playerController', ['$scope', 'playerSt
           return possibleTrack;
         }
 
-        // If there are more than 10 songs from the source, aplply the check on 10%
+        // If there are more than 10 songs from the source, apply the check on 10%
         if (playerStatus.sourceList.length >= 10) {
           // Only check the last X songs, where X is the 10% of the sourceList's length
           var lastPlayed = playerStatus.playList.slice(
